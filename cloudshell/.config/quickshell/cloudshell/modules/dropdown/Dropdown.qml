@@ -72,7 +72,7 @@ DropdownWindow {
                     color: Appearance.colors.colOnLayer0
                 }
                 StyledText {
-                    text: Qt.locale().toString(DateTime.clock.date, "dddd, MMMM d")
+                    text: Qt.locale().toString(DateTime.clock.date, "dddd d MMMM")
                     font.pixelSize: Appearance.font.pixelSize.small
                     color: Appearance.colors.colSubtext
                 }
