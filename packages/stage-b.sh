@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Stage B: remove what only ii (end-4 dots) needed. Run once you've settled on cloudshell.
-# ii's config folder (~/.config/quickshell/ii) is kept as an archive; delete it yourself if you want.
+# ii's config/state were archived to ~/dotfiles-backup/ii-archive-*.tar.gz before this.
 # Shows the list and asks before removing anything.
 set -euo pipefail
 
@@ -26,9 +26,10 @@ if [[ "$ok" == [yY] ]]; then
 fi
 
 echo
-read -rp "Delete ii's Python venv (~/.local/state/quickshell/.venv, ~330 MB) and its hand-installed fonts? [y/N] " ok
+read -rp "Delete ii's Python venv (~330 MB), its installer cache ~/.cache/dots-hyprland (~3 GB) and its hand-installed fonts? [y/N] " ok
 if [[ "$ok" == [yY] ]]; then
-  rm -rf ~/.local/state/quickshell/.venv
+  rm -rf ~/.local/state/quickshell
+  rm -rf ~/.cache/dots-hyprland
   rm -rf ~/.local/share/fonts/illogical-impulse-*
   fc-cache -f >/dev/null
 fi

@@ -40,3 +40,11 @@ hl.window_rule({
 		float = 1,
 	},
 })
+
+-- Cloudshell settings window
+hl.window_rule({
+	match = { title = "^(Cloudshell Settings)$" },
+	float = true,
+	center = true,
+	size = { "(monitor_w*0.45)", "(monitor_h*0.65)" },
+})

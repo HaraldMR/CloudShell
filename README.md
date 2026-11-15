@@ -18,23 +18,19 @@ Managed with GNU stow, so every folder at the top level is a "package" that gets
 ```sh
 git clone <this repo> ~/dotfiles
 ~/dotfiles/install.sh           # packages, links, skwd-wall setup, imports ii settings if present
-cloudshell-switch cloudshell    # start it
+cloudshell-switch cloudshell    # start it (or log out and back in)
 ```
 
 `./install.sh --links` only (re)creates the symlinks. Everything installs from the official repos or the AUR
 (`-bin` packages), so a normal `cachy-update` keeps it all up to date.
 
-## Switching between cloudshell and ii
+## Switching Quickshell configs
 
-```sh
-cloudshell-switch cloudshell
-cloudshell-switch ii
-cloudshell-switch status
-```
-
-This only rewrites the `qsConfig` line in `~/.config/hypr/custom/variables.lua`, starts/stops the skwd-wall
-daemon (cloudshell doesn't draw a wallpaper itself), and restarts Quickshell. All Hyprland keybinds keep
-working because cloudshell answers to the same shortcut names ii used.
+Cloudshell is the default (`qsConfig` in `hypr/hyprland/variables.lua`). ii was retired on 2026-11-15; its
+config and state are archived in `~/dotfiles-backup/ii-archive-2026-11-15.tar.gz`.
+`cloudshell-switch <config> | status` still works for any other config in `~/.config/quickshell/`: it rewrites
+the `qsConfig` line in `~/.config/hypr/custom/variables.lua`, starts/stops the skwd-wall daemon and restarts
+Quickshell. The Hyprland keybinds use the shortcut names ii used, which cloudshell answers to.
 
 ## How cloudshell is put together
 
@@ -68,7 +64,7 @@ wallpaper in Settings > Wallpaper & style and press "Regenerate colours".
 Hue bridge file, quick-toggle layout and notification rules. `~/.config/hue/bridge.env` (Hue API key) is also
 kept out of git; see `cloudshell/.config/quickshell/cloudshell/scripts/hue/hueLight.sh` for its format.
 
-## Leaving ii behind for good
+## Leaving ii behind
 
-`packages/stage-a.sh` (already run) swapped the end-4 packages for repo/AUR ones without removing anything.
-When you no longer need ii, run `packages/stage-b.sh` to remove what only ii used. It asks before every step.
+`packages/stage-a.sh` swapped the end-4 packages for repo/AUR ones without removing anything.
+`packages/stage-b.sh` removes what only ii used (packages, venv, installer cache). It asks before every step.
