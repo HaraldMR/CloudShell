@@ -1,15 +1,11 @@
 #!/usr/bin/env bash
 # Screen recording via gpu-screen-recorder.
-#   record.sh [--fullscreen | --region "X,Y WxH"] [--sound]   start, or stop if already recording
+#   record.sh [--fullscreen | --region "X,Y WxH"] [--sound]   start, or stop if a recording is running
 #   record.sh --stop
 #   record.sh --replay-start [--sound] | --replay-stop | --replay-save
 #   record.sh --status        prints "recording", "replay", "both" or "idle"
+# Running recordings are found from the processes themselves (no pid files that can go stale).
 set -uo pipefail
-
-run_dir="${XDG_RUNTIME_DIR:-/tmp}/cloudshell"
-rec_pid="$run_dir/record.pid"
-replay_pid="$run_dir/replay.pid"
-mkdir -p "$run_dir"
 
 config="${XDG_CONFIG_HOME:-$HOME/.config}/cloudshell/config.json"
 save_dir=$(jq -r '.screenRecord.savePath // empty' "$config" 2>/dev/null)
@@ -17,9 +13,32 @@ save_dir=$(jq -r '.screenRecord.savePath // empty' "$config" 2>/dev/null)
 replay_seconds=$(jq -r '.gameBar.replaySeconds // 60' "$config" 2>/dev/null)
 mkdir -p "$save_dir"
 
-alive() { [[ -f "$1" ]] && kill -0 "$(cat "$1")" 2>/dev/null; }
-notify() { notify-send -a "Recorder" "$@" & disown; }
+notify() { notify-send -a "Recorder" "$@" >/dev/null 2>&1 & }
 focused_monitor() { hyprctl monitors -j 2>/dev/null | jq -r '.[] | select(.focused) | .name'; }
+
+# PIDs of running gpu-screen-recorder processes; $1 = "record" or "replay" (replay = has -r)
+recorder_pids() {
+    local pid args
+    for pid in $(pgrep -f gpu-screen-recorder); do
+        [[ "$(readlink "/proc/$pid/exe" 2>/dev/null)" == */gpu-screen-recorder ]] || continue
+        args=" $(tr '\0' ' ' <"/proc/$pid/cmdline" 2>/dev/null) "
+        if [[ "$args" == *" -r "* ]]; then
+            [[ "$1" == replay ]] && echo "$pid"
+        else
+            [[ "$1" == record ]] && echo "$pid"
+        fi
+    done
+}
+recording() { [[ -n "$(recorder_pids record)" ]]; }
+replaying() { [[ -n "$(recorder_pids replay)" ]]; }
+
+stop_recording() {
+    local pids
+    pids=$(recorder_pids record)
+    [[ -z "$pids" ]] && return 1
+    kill -INT $pids
+    notify "Recording saved" "$save_dir"
+}
 
 region="" sound=0 fullscreen=0 mode="record"
 while (($#)); do
@@ -36,63 +55,50 @@ while (($#)); do
     shift
 done
 
-case "$mode" in
-status)
-    r=0 p=0
-    alive "$rec_pid" && r=1
-    alive "$replay_pid" && p=1
-    if ((r && p)); then echo both; elif ((r)); then echo recording; elif ((p)); then echo replay; else echo idle; fi
-    exit 0
-    ;;
-stop)
-    alive "$rec_pid" && kill -INT "$(cat "$rec_pid")" && notify "Recording saved" "$save_dir"
-    exit 0
-    ;;
-replay-stop)
-    alive "$replay_pid" && kill -INT "$(cat "$replay_pid")" && notify "Replay buffer stopped"
-    rm -f "$replay_pid"
-    exit 0
-    ;;
-replay-save)
-    if alive "$replay_pid"; then
-        kill -USR1 "$(cat "$replay_pid")" && notify "Replay saved" "Last ${replay_seconds}s → $save_dir"
-    else
-        notify "Replay buffer is not running"
-    fi
-    exit 0
-    ;;
-esac
-
 audio=()
 ((sound)) && audio=(-a default_output)
 
-if [[ "$mode" == "replay-start" ]]; then
-    alive "$replay_pid" && exit 0
-    gpu-screen-recorder -w "$(focused_monitor)" -f 60 -c mp4 -r "$replay_seconds" "${audio[@]}" -o "$save_dir" &
-    echo $! >"$replay_pid"
+case "$mode" in
+status)
+    r=0 p=0
+    recording && r=1
+    replaying && p=1
+    if ((r && p)); then echo both; elif ((r)); then echo recording; elif ((p)); then echo replay; else echo idle; fi
+    ;;
+stop)
+    stop_recording || true
+    ;;
+replay-stop)
+    pids=$(recorder_pids replay)
+    [[ -n "$pids" ]] && kill -INT $pids && notify "Replay buffer stopped"
+    ;;
+replay-save)
+    pids=$(recorder_pids replay)
+    if [[ -n "$pids" ]]; then
+        kill -USR1 $pids && notify "Replay saved" "Last ${replay_seconds}s → $save_dir"
+    else
+        notify "Replay buffer is not running"
+    fi
+    ;;
+replay-start)
+    replaying && exit 0
+    setsid gpu-screen-recorder -w "$(focused_monitor)" -f 60 -c mp4 -r "$replay_seconds" "${audio[@]}" -o "$save_dir" >/dev/null 2>&1 </dev/null &
     notify "Replay buffer started" "Save the last ${replay_seconds}s from the game bar"
-    exit 0
-fi
+    ;;
+record)
+    # Toggle: a second press stops the running recording
+    stop_recording && exit 0
 
-# Toggle: stop a running recording
-if alive "$rec_pid"; then
-    kill -INT "$(cat "$rec_pid")"
-    rm -f "$rec_pid"
-    notify "Recording saved" "$save_dir"
-    exit 0
-fi
-
-out="$save_dir/recording_$(date '+%Y-%m-%d_%H.%M.%S').mp4"
-if ((fullscreen)) || [[ -z "$region" ]]; then
-    target=(-w "$(focused_monitor)")
-else
-    # "X,Y WxH" (slurp format) -> "WxH+X+Y"
-    read -r xy wh <<<"$region"
-    target=(-w region -region "${wh}+${xy%,*}+${xy#*,}")
-fi
-
-gpu-screen-recorder "${target[@]}" -f 60 "${audio[@]}" -o "$out" &
-echo $! >"$rec_pid"
-notify "Recording started" "$(basename "$out")"
-wait $!
-rm -f "$rec_pid"
+    out="$save_dir/recording_$(date '+%Y-%m-%d_%H.%M.%S').mp4"
+    if ((fullscreen)) || [[ -z "$region" ]]; then
+        target=(-w "$(focused_monitor)")
+    else
+        # "X,Y WxH" (slurp format) -> "WxH+X+Y"
+        read -r xy wh <<<"$region"
+        target=(-w region -region "${wh}+${xy%,*}+${xy#*,}")
+    fi
+    setsid gpu-screen-recorder "${target[@]}" -f 60 "${audio[@]}" -o "$out" >/dev/null 2>&1 </dev/null &
+    notify "Recording started" "$(basename "$out")"
+    ;;
+esac
+exit 0

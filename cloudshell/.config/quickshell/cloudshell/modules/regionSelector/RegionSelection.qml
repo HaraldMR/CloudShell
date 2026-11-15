@@ -200,17 +200,20 @@ PanelWindow {
     Process {
         id: checkRecordingProc
         running: isRecording
-        command: ["pidof", "gpu-screen-recorder"]
-        onExited: (exitCode, exitStatus) => {
-            root.preparationDone = !screenshotProc.running
-            root.recordingShouldStop = (exitCode === 0);
+        command: [Directories.recordScriptPath, "--status"]
+        stdout: StdioCollector {
+            onStreamFinished: {
+                const status = this.text.trim();
+                root.recordingShouldStop = (status === "recording" || status === "both");
+                root.preparationDone = !screenshotProc.running;
+            }
         }
     }
     property bool preparationDone: false
     onPreparationDoneChanged: {
         if (!preparationDone) return;
         if (root.isRecording && root.recordingShouldStop) {
-            Quickshell.execDetached([Directories.recordScriptPath]);
+            Quickshell.execDetached([Directories.recordScriptPath, "--stop"]);
             root.dismiss();
             return;
         }
