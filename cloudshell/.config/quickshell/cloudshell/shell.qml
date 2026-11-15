@@ -35,12 +35,14 @@ ShellRoot {
         Cliphist.refresh();
     }
 
-    // Lock right after login (hyprlock), like ii's lock.launchOnStartup
+    // Lock right after login (hyprlock), like ii's lock.launchOnStartup.
+    // Only when Hyprland itself just started, so restarting/switching the shell never locks.
     Connections {
-        target: Persistent
+        target: Config
         function onReadyChanged() {
-            if (Persistent.ready && Persistent.isNewHyprlandInstance && Config.options.lock.launchOnStartup)
-                Quickshell.execDetached(["bash", "-c", Config.options.lock.command]);
+            if (!Config.ready || !Config.options.lock.launchOnStartup)
+                return;
+            Quickshell.execDetached(["bash", "-c", `pid=$(pidof -s Hyprland) && [ "$(ps -o etimes= -p "$pid" | tr -d ' ')" -lt 60 ] && { ${Config.options.lock.command}; }`]);
         }
     }
 
