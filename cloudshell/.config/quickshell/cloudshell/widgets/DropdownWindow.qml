@@ -10,6 +10,10 @@ import Quickshell.Hyprland
 /**
  * A Material 3 surface that drops down from the bar on the focused monitor.
  * Closes on Escape and on clicks outside. Used by the calendar and the quick settings dropdown.
+ *
+ * The window itself has a fixed size (the most the panel can grow to) and an input mask on the
+ * visible surface. Only the surface animates, so growing/shrinking never resizes the Wayland
+ * window every frame, which is what made the animation stutter.
  */
 PanelWindow {
     id: root
@@ -26,6 +30,9 @@ PanelWindow {
     default property alias contentData: contentArea.data
     readonly property real contentWidth: panelWidth - padding * 2
     readonly property real availableContentHeight: maxPanelHeight - padding * 2
+    readonly property real targetPanelHeight: Math.min(Math.max(contentHeight + padding * 2, minimumPanelHeight), maxPanelHeight)
+    // Height of the content area right now (follows the animated surface)
+    readonly property real currentContentHeight: surface.height - padding * 2
     signal dismissed
 
     // Space for the elevation shadow around the surface
@@ -51,7 +58,11 @@ PanelWindow {
     }
 
     implicitWidth: panelWidth + shadowMargin * 2
-    implicitHeight: Math.min(Math.max(contentHeight + padding * 2, minimumPanelHeight), maxPanelHeight) + shadowMargin * 2
+    implicitHeight: maxPanelHeight + shadowMargin * 2
+
+    mask: Region {
+        item: surface
+    }
 
     function dismiss() {
         root.dismissed();
@@ -90,7 +101,7 @@ PanelWindow {
         x: root.shadowMargin
         y: root.shadowMargin + (root.open ? 0 : -16)
         width: root.panelWidth
-        height: root.implicitHeight - root.shadowMargin * 2
+        height: root.targetPanelHeight
         radius: Appearance.rounding.verylarge
         color: Appearance.colors.colLayer0
         border.width: 1
@@ -110,8 +121,14 @@ PanelWindow {
         Behavior on y {
             animation: Appearance.animation.elementMove.numberAnimation.createObject(this)
         }
+        // Expressive spatial spring: quick, with a slight settle
         Behavior on height {
-            animation: Appearance.animation.elementResize.numberAnimation.createObject(this)
+            enabled: root.open
+            NumberAnimation {
+                duration: Appearance.animationCurves.expressiveFastSpatialDuration
+                easing.type: Easing.BezierSpline
+                easing.bezierCurve: Appearance.animationCurves.expressiveDefaultSpatial
+            }
         }
 
         Item {

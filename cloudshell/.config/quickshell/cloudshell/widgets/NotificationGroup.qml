@@ -39,6 +39,14 @@ MouseArea { // Notification group area
         destroyAnimation.running = true;
     }
 
+    Connections {
+        target: Notifications
+        function onToggleGroupsRequested() {
+            if (!root.popup)
+                root.toggleExpanded();
+        }
+    }
+
     hoverEnabled: true
     onContainsMouseChanged: {
         if (!root.popup) return;

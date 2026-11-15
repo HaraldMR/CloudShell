@@ -68,6 +68,10 @@ ProgressBar {
         }
 
         Loader {
+            anchors {
+                left: parent.left
+                verticalCenter: parent.verticalCenter
+            }
             active: !root.wavy
             sourceComponent: Rectangle {
                 anchors.left: parent.left
@@ -80,6 +84,7 @@ ProgressBar {
         
         Rectangle { // Right remaining part fill
             anchors.right: parent.right
+            anchors.verticalCenter: parent.verticalCenter
             width: (1 - root.visualPosition) * parent.width - valueBarGap
             height: parent.height
             radius: height / 2
@@ -88,6 +93,7 @@ ProgressBar {
         
         Rectangle { // Stop point
             anchors.right: parent.right
+            anchors.verticalCenter: parent.verticalCenter
             width: valueBarGap
             height: valueBarGap
             radius: height / 2

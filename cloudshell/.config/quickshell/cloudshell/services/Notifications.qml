@@ -231,6 +231,7 @@ Singleton {
     signal discard(id: int)
     signal discardAll
     signal timeout(id: var)
+    signal toggleGroupsRequested
 
     NotificationServer {
         id: notifServer
@@ -522,6 +523,9 @@ Singleton {
         }
         function clear(): void {
             root.discardAllNotifications();
+        }
+        function toggleGroups(): void {
+            root.toggleGroupsRequested();
         }
     }
 }

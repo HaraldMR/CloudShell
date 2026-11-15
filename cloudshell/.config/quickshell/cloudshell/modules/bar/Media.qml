@@ -11,12 +11,12 @@ import Quickshell.Hyprland
 
 Item {
     id: root
-    property bool borderless: Config.options.bar.borderless
     readonly property MprisPlayer activePlayer: MprisController.activePlayer
     readonly property string cleanedTitle: StringUtils.cleanMusicTitle(activePlayer?.trackTitle) || qsTr("No media")
+    readonly property bool toggled: GlobalStates.mediaControlsOpen
+    readonly property color colText: toggled ? Appearance.colors.colOnSecondaryContainer : Appearance.colors.colOnLayer1
 
-    Layout.fillHeight: true
-    implicitWidth: rowLayout.implicitWidth + rowLayout.spacing * 2
+    implicitWidth: rowLayout.implicitWidth + 12 * 2
     implicitHeight: Appearance.sizes.barHeight
 
     Timer {
@@ -26,10 +26,29 @@ Item {
         onTriggered: activePlayer.positionChanged()
     }
 
+    // Hover/toggled pill, same style as the clock and status buttons
+    Rectangle {
+        id: background
+        anchors {
+            left: parent.left
+            right: parent.right
+            verticalCenter: parent.verticalCenter
+        }
+        height: Appearance.sizes.baseBarHeight - 8
+        radius: Appearance.rounding.full
+        color: root.toggled ? (mouseArea.containsMouse ? Appearance.colors.colSecondaryContainerHover : Appearance.colors.colSecondaryContainer) : mouseArea.pressed ? Appearance.colors.colLayer1Active : mouseArea.containsMouse ? Appearance.colors.colLayer1Hover : ColorUtils.transparentize(Appearance.colors.colLayer1Hover, 1)
+        Behavior on color {
+            animation: Appearance.animation.elementMoveFast.colorAnimation.createObject(this)
+        }
+    }
+
     MouseArea {
+        id: mouseArea
         anchors.fill: parent
+        hoverEnabled: true
+        cursorShape: Qt.PointingHandCursor
         acceptedButtons: Qt.MiddleButton | Qt.BackButton | Qt.ForwardButton | Qt.RightButton | Qt.LeftButton
-        onPressed: (event) => {
+        onPressed: event => {
             if (event.button === Qt.MiddleButton) {
                 activePlayer.togglePlaying();
             } else if (event.button === Qt.BackButton) {
@@ -37,16 +56,19 @@ Item {
             } else if (event.button === Qt.ForwardButton || event.button === Qt.RightButton) {
                 activePlayer.next();
             } else if (event.button === Qt.LeftButton) {
-                GlobalStates.mediaControlsOpen = !GlobalStates.mediaControlsOpen
+                GlobalStates.mediaControlsOpen = !GlobalStates.mediaControlsOpen;
             }
         }
     }
 
-    RowLayout { // Real content
+    RowLayout {
         id: rowLayout
-
-        spacing: 4
-        anchors.fill: parent
+        spacing: 6
+        anchors {
+            fill: parent
+            leftMargin: 12
+            rightMargin: 12
+        }
 
         ClippedFilledCircularProgress {
             id: mediaCircProg
@@ -54,14 +76,14 @@ Item {
             lineWidth: Appearance.rounding.unsharpen
             value: activePlayer?.position / activePlayer?.length
             implicitSize: 20
-            colPrimary: Appearance.colors.colOnSecondaryContainer
+            colPrimary: root.toggled ? Appearance.colors.colOnSecondaryContainer : Appearance.colors.colOnSecondaryContainer
             enableAnimation: false
 
             Item {
                 anchors.centerIn: parent
                 width: mediaCircProg.implicitSize
                 height: mediaCircProg.implicitSize
-                
+
                 MaterialSymbol {
                     anchors.centerIn: parent
                     fill: 1
@@ -74,16 +96,12 @@ Item {
 
         StyledText {
             visible: Config.options.bar.verbose
-            width: rowLayout.width - (CircularProgress.size + rowLayout.spacing * 2)
             Layout.alignment: Qt.AlignVCenter
-            Layout.fillWidth: true // Ensures the text takes up available space
-            Layout.rightMargin: rowLayout.spacing
-            horizontalAlignment: Text.AlignHCenter
-            elide: Text.ElideRight // Truncates the text on the right
-            color: Appearance.colors.colOnLayer1
+            Layout.fillWidth: true
+            horizontalAlignment: Text.AlignLeft
+            elide: Text.ElideRight
+            color: root.colText
             text: `${cleanedTitle}${activePlayer?.trackArtist ? ' • ' + activePlayer.trackArtist : ''}`
         }
-
     }
-
 }

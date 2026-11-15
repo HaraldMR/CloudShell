@@ -57,6 +57,7 @@ DropdownWindow {
 
         // Header: clock + actions
         RowLayout {
+            id: headerRow
             Layout.fillWidth: true
             Layout.leftMargin: 6
             spacing: 6
@@ -132,8 +133,13 @@ DropdownWindow {
             id: shade
             Layout.fillWidth: true
             visible: Config.options.dropdown.sections.notifications
-            // Whatever room is left on screen goes to the notification list
-            maxHeight: Math.max(160, root.availableContentHeight - (mainColumn.implicitHeight - shade.implicitHeight) - 60)
+            // Whatever room is left on screen goes to the notification list.
+            // Computed from the other sections only (never from the shade itself) to avoid a layout feedback loop.
+            readonly property real otherSectionsHeight: headerRow.implicitHeight + quickPanel.implicitHeight
+                + (sliders.visible ? sliders.implicitHeight + mainColumn.spacing : 0)
+                + (stats.visible ? stats.implicitHeight + mainColumn.spacing : 0)
+                + mainColumn.spacing * 2
+            maxHeight: Math.max(160, root.availableContentHeight - otherSectionsHeight - 50)
         }
     }
 
@@ -190,7 +196,7 @@ DropdownWindow {
         x: 0
         y: 0
         width: root.contentWidth
-        height: root.implicitHeight - root.shadowMargin * 2 - root.padding * 2
+        height: root.currentContentHeight
 
         onShownChanged: if (shown)
             toggleDialogLoader.active = true

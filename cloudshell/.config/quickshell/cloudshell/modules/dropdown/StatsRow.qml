@@ -37,7 +37,7 @@ Rectangle {
         spacing: 0
 
         Stat {
-            icon: "memory"
+            icon: "developer_board"
             label: qsTr("CPU")
             value: ResourceUsage.cpuUsage
         }
@@ -72,7 +72,9 @@ Rectangle {
         required property string icon
         required property string label
         required property real value
+        // Equal-width cells with everything centred
         Layout.fillWidth: true
+        Layout.preferredWidth: 1
         spacing: 4
 
         RowLayout {
@@ -92,7 +94,9 @@ Rectangle {
         }
         StyledProgressBar {
             Layout.alignment: Qt.AlignHCenter
-            implicitWidth: 64
+            Layout.preferredWidth: 72
+            implicitWidth: 72
+            valueBarWidth: 72
             value: stat.value
         }
         StyledText {

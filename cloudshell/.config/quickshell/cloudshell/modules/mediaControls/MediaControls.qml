@@ -83,6 +83,7 @@ Scope {
         sourceComponent: PanelWindow {
             id: panelWindow
             visible: true
+            screen: Quickshell.screens.find(s => s.name === Hyprland.focusedMonitor?.name) ?? null
 
             exclusionMode: ExclusionMode.Ignore
             exclusiveZone: 0
@@ -100,7 +101,8 @@ Scope {
             margins {
                 top: Config.options.bar.vertical ? ((panelWindow.screen.height / 2) - widgetHeight * 1.5) : Appearance.sizes.barHeight
                 bottom: Appearance.sizes.barHeight
-                left: Config.options.bar.vertical ? Appearance.sizes.barHeight : ((panelWindow.screen.width / 2) - (osdWidth / 2) - widgetWidth)
+                // Right below the media button in the bar (cards have an elevation margin around them)
+                left: Math.max(0, (GlobalStates.mediaAnchors[panelWindow.screen?.name] ?? 200) - Appearance.sizes.elevationMargin)
                 right: Appearance.sizes.barHeight
             }
 
@@ -192,17 +194,17 @@ Scope {
         target: "mediaControls"
 
         function toggle(): void {
-            mediaControlsLoader.active = !mediaControlsLoader.active;
-            if (mediaControlsLoader.active)
+            GlobalStates.mediaControlsOpen = !GlobalStates.mediaControlsOpen;
+            if (GlobalStates.mediaControlsOpen)
                 Notifications.timeoutAll();
         }
 
         function close(): void {
-            mediaControlsLoader.active = false;
+            GlobalStates.mediaControlsOpen = false;
         }
 
         function open(): void {
-            mediaControlsLoader.active = true;
+            GlobalStates.mediaControlsOpen = true;
             Notifications.timeoutAll();
         }
     }

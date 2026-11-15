@@ -86,17 +86,28 @@ Item { // Bar content region
         }
 
         Revealer {
+            id: mediaRevealer
             reveal: root.showMedia
             Layout.alignment: Qt.AlignVCenter
-            BarGroup {
-                implicitWidth: Math.min(media.implicitWidth + padding * 2, root.narrow ? 220 : Appearance.sizes.barCenterSideModuleWidth)
-                Media {
-                    id: media
-                    Layout.fillWidth: true
-                }
+            Media {
+                id: media
+                width: Math.min(implicitWidth, root.narrow ? 220 : Appearance.sizes.barCenterSideModuleWidth)
             }
         }
     }
+
+    // Tell the media popup where the media button is on this screen, so it opens right below it
+    readonly property real mediaAnchorX: leftSection.x + mediaRevealer.x
+    function publishMediaAnchor() {
+        if (!root.screen)
+            return;
+        const anchors = Object.assign({}, GlobalStates.mediaAnchors);
+        anchors[root.screen.name] = root.mediaAnchorX;
+        GlobalStates.mediaAnchors = anchors;
+    }
+    onMediaAnchorXChanged: publishMediaAnchor()
+    onScreenChanged: publishMediaAnchor()
+    Component.onCompleted: publishMediaAnchor()
 
     // Center: workspaces / app overview (unchanged from ii)
     Row {

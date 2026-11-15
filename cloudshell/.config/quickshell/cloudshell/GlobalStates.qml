@@ -13,6 +13,7 @@ Singleton {
     property bool dropdownOpen: false
     property bool calendarOpen: false
     property bool mediaControlsOpen: false
+    property var mediaAnchors: ({}) // screen name -> x of the bar's media button
     property bool osdBrightnessOpen: false
     property bool osdVolumeOpen: false
     property bool gameBarOpen: false
