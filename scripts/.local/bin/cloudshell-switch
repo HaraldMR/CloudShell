@@ -31,7 +31,7 @@ esac
 mkdir -p "$(dirname "$vars")"
 touch "$vars"
 if grep -q 'hl.env("qsConfig"' "$vars"; then
-    sed -i "s/hl\.env(\"qsConfig\",[^)]*)/hl.env(\"qsConfig\", \"$target\")/" "$vars"
+    sed -i --follow-symlinks "s/hl\.env(\"qsConfig\",[^)]*)/hl.env(\"qsConfig\", \"$target\")/" "$vars"
 else
     printf '\n-- Which Quickshell config to run (set by cloudshell-switch)\nhl.env("qsConfig", "%s")\n' "$target" >>"$vars"
 fi

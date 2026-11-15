@@ -16,8 +16,8 @@ Managed with GNU stow, so every folder at the top level is a "package" that gets
 ## New machine
 
 ```sh
-git clone <this repo> ~/dotfiles
-~/dotfiles/install.sh           # packages, links, skwd-wall setup, imports ii settings if present
+git clone <this repo> ~/.config/.dotfiles
+~/.config/.dotfiles/install.sh           # packages, links, skwd-wall setup, imports ii settings if present
 cloudshell-switch cloudshell    # start it (or log out and back in)
 ```
 
