@@ -3,6 +3,8 @@
 Personal desktop setup: Hyprland + **cloudshell** (a Quickshell config), themed from the wallpaper.
 Managed with GNU stow, so every folder at the top level is a "package" that gets symlinked into `~`.
 
+The Quickshell config is modified and stripped down modules from https://github.com/end-4/dots-hyprland .
+
 | Package | What it links |
 |---|---|
 | `cloudshell` | `~/.config/quickshell/cloudshell` – the shell |
