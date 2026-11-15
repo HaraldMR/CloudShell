@@ -8,6 +8,7 @@
 
 import qs.core
 import qs.services
+import qs.core.functions
 import qs.modules.bar
 import qs.modules.calendar
 import qs.modules.dropdown
@@ -45,7 +46,7 @@ ShellRoot {
         function onReadyChanged() {
             if (!Config.ready || !Config.options.lock.launchOnStartup)
                 return;
-            Quickshell.execDetached(["bash", "-c", `pid=$(pidof -s Hyprland) && [ "$(ps -o etimes= -p "$pid" | tr -d ' ')" -lt 60 ] && { ${Config.options.lock.command}; }`]);
+            Quickshell.execDetached(["bash", "-c", `pid=$(pidof -s Hyprland) && [ "$(ps -o etimes= -p "$pid" | tr -d ' ')" -lt 60 ] && { '${Directories.scriptPath}/lock/wallpaper.sh'; ${Config.options.lock.command}; }`]);
         }
     }
 

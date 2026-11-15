@@ -247,6 +247,7 @@ Singleton {
 
             property JsonObject lock: JsonObject {
                 property bool launchOnStartup: true
+                property bool blur: true // Blur the wallpaper behind hyprlock
                 property string command: "pidof hyprlock || hyprlock"
             }
 

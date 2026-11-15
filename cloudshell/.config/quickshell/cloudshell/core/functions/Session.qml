@@ -16,8 +16,9 @@ Singleton {
         Quickshell.execDetached(["bash", "-c", `${Config.options.apps.changePassword}`]);
     }
 
+    // Refresh hyprlock's wallpaper to match skwd-wall, then lock
     function lock() {
-        Quickshell.execDetached(["bash", "-c", Config.options.lock.command]);
+        Quickshell.execDetached(["bash", "-c", `'${Directories.scriptPath}/lock/wallpaper.sh'; ${Config.options.lock.command}`]);
     }
 
     function suspend() {

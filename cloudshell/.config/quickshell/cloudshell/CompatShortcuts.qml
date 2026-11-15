@@ -1,6 +1,7 @@
 import qs
 import qs.core
 import qs.services
+import qs.core.functions
 import QtQuick
 import Quickshell
 import Quickshell.Hyprland
@@ -15,7 +16,7 @@ Scope {
     id: root
 
     function lock() {
-        Quickshell.execDetached(["bash", "-c", Config.options.lock.command]);
+        Session.lock();
     }
 
     // hypridle's lock_cmd and Super+L dispatch this

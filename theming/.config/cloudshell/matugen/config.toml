@@ -18,6 +18,7 @@ output_path = '~/.config/hypr/hyprland/colors.lua'
 [templates.hyprlock]
 input_path = '~/.config/cloudshell/matugen/templates/hyprlock-colors.conf'
 output_path = '~/.config/hypr/hyprlock/colors.conf'
+post_hook = '~/.config/cloudshell/matugen/hooks/apply-hyprlock.sh'
 
 [templates.gtk3]
 input_path = '~/.config/cloudshell/matugen/templates/gtk3.css'

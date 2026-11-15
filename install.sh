@@ -35,8 +35,8 @@ link() {
     command -v stow >/dev/null || { echo "!! stow is not installed"; exit 1; }
     mkdir -p ~/.config/quickshell ~/.config/cloudshell ~/.local/bin ~/.local/share/fonts
     # Whole-folder links for the shell itself; per-file links where programs write generated files next to ours
-    stow "${extra[@]}" -t ~ cloudshell fonts
-    stow "${extra[@]}" --no-folding -t ~ theming hypr kitty fish scripts
+    stow "${extra[@]}" -t ~ cloudshell fonts theming
+    stow "${extra[@]}" --no-folding -t ~ hypr kitty fish scripts
     # Machine-specific/generated Hyprland files: create defaults if missing
     (cd hypr-defaults && find . -type f) | while read -r f; do
         [[ -e ~/.config/hypr/"$f" ]] || install -D -m 644 "hypr-defaults/$f" ~/.config/hypr/"$f"
