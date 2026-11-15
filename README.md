@@ -21,23 +21,14 @@ git clone <this repo> ~/.config/dotfiles
 cloudshell-switch cloudshell    # start it (or log out and back in)
 ```
 
-`./install.sh --links` only (re)creates the symlinks. Everything installs from the official repos or the AUR
-(`-bin` packages), so a normal `cachy-update` keeps it all up to date.
-
-## Switching Quickshell configs
-
-Cloudshell is the default (`qsConfig` in `hypr/hyprland/variables.lua`). ii was retired on 2026-11-15; its
-config and state are archived in `~/dotfiles-backup/ii-archive-2026-11-15.tar.gz`.
-`cloudshell-switch <config> | status` still works for any other config in `~/.config/quickshell/`: it rewrites
-the `qsConfig` line in `~/.config/hypr/custom/variables.lua`, starts/stops the skwd-wall daemon and restarts
-Quickshell. The Hyprland keybinds use the shortcut names ii used, which cloudshell answers to.
+`./install.sh --links` only (re)creates the symlinks.
 
 ## How cloudshell is put together
 
 ```
 cloudshell/
 ├─ shell.qml            loads each module if enabled ("auto" = only when its programs are installed)
-├─ CompatShortcuts.qml  shortcut names from the ii Hyprland config, mapped to cloudshell
+├─ CompatShortcuts.qml  shortcut names from the Hyprland config, mapped to cloudshell
 ├─ settings.qml         `qs -p settings.qml` forwards to the in-shell settings window
 ├─ core/                Config (~/.config/cloudshell/config.json), Appearance (Material 3 tokens), Persistent state
 ├─ services/            Audio, Network, Notifications, Theme, Deps (program detection), Wallpaper (skwd-wall), ...
@@ -60,11 +51,4 @@ wallpaper in Settings > Wallpaper & style and press "Regenerate colours".
 
 ### Machine-specific settings
 
-`~/.config/cloudshell/config.json` is not in the repo. It holds per-machine things like the line-in device names,
-Hue bridge file, quick-toggle layout and notification rules. `~/.config/hue/bridge.env` (Hue API key) is also
-kept out of git; see `cloudshell/.config/quickshell/cloudshell/scripts/hue/hueLight.sh` for its format.
-
-## Leaving ii behind
-
-`packages/stage-a.sh` swapped the end-4 packages for repo/AUR ones without removing anything.
-`packages/stage-b.sh` removes what only ii used (packages, venv, installer cache). It asks before every step.
+`~/.config/cloudshell/config.json` is not in the repo. It holds per-machine things like the line-in device names, quick-toggle layout and notification rules.
