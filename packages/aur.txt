@@ -1,0 +1,11 @@
+# AUR packages (prebuilt -bin where possible so cachy-update stays fast).
+
+# Wallpaper selector + daemon + renderer (skwd-wall v2)
+skwd-wall-v2-bin
+skwd-deck-bin
+skwd-paper-bin
+
+# Cursor, Qt widget style, icon theme
+bibata-cursor-theme-bin
+darkly-bin
+breeze-plus

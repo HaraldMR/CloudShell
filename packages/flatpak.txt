@@ -1,0 +1,2 @@
+# Flatpaks (only needed on distros where the native package is missing)
+# com.dec05eba.gpu_screen_recorder

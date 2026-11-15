@@ -1,0 +1,77 @@
+# Official repos (Arch extra / CachyOS). One package per line, "#" starts a comment.
+
+# --- Shell core ---
+quickshell
+qt6-svg
+qt6-imageformats
+qt6-wayland
+qt6-5compat
+matugen
+ttf-material-symbols-variable
+ttf-jetbrains-mono-nerd
+noto-fonts-emoji
+
+# --- System services used by cloudshell ---
+networkmanager
+bluez
+bluez-utils
+pipewire
+pipewire-pulse
+wireplumber
+upower
+power-profiles-daemon
+brightnessctl
+ddcutil
+playerctl
+cava
+libnotify
+jq
+curl
+polkit
+
+# --- Search window ---
+cliphist
+wl-clipboard
+libqalculate
+
+# --- Screenshots, OCR, recording, game bar ---
+grim
+imagemagick
+satty
+slurp
+tesseract
+tesseract-data-eng
+gpu-screen-recorder
+mangohud
+
+# --- Lock / idle ---
+hyprlock
+hypridle
+
+# --- Theming targets (driven by matugen) ---
+adw-gtk-theme
+breeze
+plasma-workspace
+
+# --- Desktop plumbing ---
+hyprland
+xdg-desktop-portal
+xdg-desktop-portal-hyprland
+xdg-desktop-portal-gtk
+xdg-desktop-portal-kde
+gnome-keyring
+xdg-user-dirs
+stow
+git
+
+# --- Used by the (unchanged) Hyprland config ---
+hyprpicker
+hyprshot
+hyprsunset
+fuzzel
+wlogout
+pavucontrol-qt
+geoclue
+kitty
+fish
+dolphin

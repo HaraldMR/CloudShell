@@ -1,0 +1,4 @@
+# Generated or machine-specific files
+cloudshell/.config/quickshell/cloudshell/.qmlls.ini
+*.bak
+*.new

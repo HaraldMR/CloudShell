@@ -1,0 +1,33 @@
+# Debian / Ubuntu (best effort). Names differ from Arch; some things are missing.
+# NOT packaged on Ubuntu: quickshell (build from source or use Nix), matugen (cargo install matugen),
+# skwd-wall (WIP upstream), gpu-screen-recorder (flatpak com.dec05eba.gpu_screen_recorder).
+# Cloudshell detects missing tools at runtime and hides the modules/toggles that need them.
+
+network-manager
+bluez
+pipewire
+pipewire-pulse
+wireplumber
+upower
+power-profiles-daemon
+brightnessctl
+ddcutil
+playerctl
+libnotify-bin
+jq
+curl
+cliphist
+wl-clipboard
+qalc
+grim
+slurp
+tesseract-ocr
+tesseract-ocr-eng
+mangohud
+hyprlock
+hypridle
+adw-gtk3
+fonts-noto-color-emoji
+fonts-jetbrains-mono
+stow
+git

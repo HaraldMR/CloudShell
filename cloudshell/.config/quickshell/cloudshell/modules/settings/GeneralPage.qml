@@ -1,0 +1,138 @@
+import QtQuick
+import QtQuick.Layouts
+import qs.services
+import qs.core
+import qs.widgets
+
+ContentPage {
+    forceWidth: true
+
+    ContentSection {
+        icon: "workspaces"
+        title: qsTr("Workspaces")
+
+        ConfigSpinBox {
+            icon: "view_column"
+            text: qsTr("Workspaces shown")
+            value: Config.options.bar.workspaces.shown
+            from: 1
+            to: 30
+            stepSize: 1
+            onValueChanged: Config.options.bar.workspaces.shown = value
+        }
+        ConfigSwitch {
+            buttonIcon: "award_star"
+            text: qsTr("Show app icons")
+            checked: Config.options.bar.workspaces.showAppIcons
+            onCheckedChanged: Config.options.bar.workspaces.showAppIcons = checked
+        }
+        ConfigSwitch {
+            buttonIcon: "counter_1"
+            text: qsTr("Always show numbers")
+            checked: Config.options.bar.workspaces.alwaysShowNumbers
+            onCheckedChanged: Config.options.bar.workspaces.alwaysShowNumbers = checked
+        }
+    }
+
+    ContentSection {
+        icon: "overview_key"
+        title: qsTr("Overview")
+
+        ConfigSwitch {
+            buttonIcon: "check"
+            text: qsTr("Show workspace overview in the Super window")
+            checked: Config.options.overview.enable
+            onCheckedChanged: Config.options.overview.enable = checked
+        }
+        ConfigSwitch {
+            buttonIcon: "center_focus_strong"
+            text: qsTr("Center icons")
+            checked: Config.options.overview.centerIcons
+            onCheckedChanged: Config.options.overview.centerIcons = checked
+        }
+        ConfigSpinBox {
+            icon: "loupe"
+            text: qsTr("Scale (%)")
+            value: Config.options.overview.scale * 100
+            from: 1
+            to: 100
+            stepSize: 1
+            onValueChanged: Config.options.overview.scale = value / 100
+        }
+        ConfigRow {
+            uniform: true
+            ConfigSpinBox {
+                icon: "splitscreen_bottom"
+                text: qsTr("Rows")
+                value: Config.options.overview.rows
+                from: 1
+                to: 20
+                stepSize: 1
+                onValueChanged: Config.options.overview.rows = value
+            }
+            ConfigSpinBox {
+                icon: "splitscreen_right"
+                text: qsTr("Columns")
+                value: Config.options.overview.columns
+                from: 1
+                to: 20
+                stepSize: 1
+                onValueChanged: Config.options.overview.columns = value
+            }
+        }
+        ConfigRow {
+            uniform: true
+            ConfigSelectionArray {
+                currentValue: Config.options.overview.orderRightLeft
+                onSelected: newValue => Config.options.overview.orderRightLeft = newValue
+                options: [
+                    { "displayName": qsTr("Left to right"), "icon": "arrow_forward", "value": false },
+                    { "displayName": qsTr("Right to left"), "icon": "arrow_back", "value": true }
+                ]
+            }
+            ConfigSelectionArray {
+                currentValue: Config.options.overview.orderBottomUp
+                onSelected: newValue => Config.options.overview.orderBottomUp = newValue
+                options: [
+                    { "displayName": qsTr("Top-down"), "icon": "arrow_downward", "value": false },
+                    { "displayName": qsTr("Bottom-up"), "icon": "arrow_upward", "value": true }
+                ]
+            }
+        }
+    }
+
+    ContentSection {
+        icon: "schedule"
+        title: qsTr("Clock")
+
+        ContentSubsection {
+            title: qsTr("Time format")
+            ConfigSelectionArray {
+                currentValue: Config.options.time.format
+                onSelected: newValue => Config.options.time.format = newValue
+                options: [
+                    { "displayName": qsTr("24h"), "icon": "schedule", "value": "hh:mm" },
+                    { "displayName": qsTr("12h"), "icon": "nest_clock_farsight_analog", "value": "h:mm AP" }
+                ]
+            }
+        }
+        ConfigSwitch {
+            buttonIcon: "calendar_today"
+            text: qsTr("Show date next to the clock")
+            checked: Config.options.bar.verbose
+            onCheckedChanged: Config.options.bar.verbose = checked
+        }
+    }
+
+    ContentSection {
+        icon: "lock"
+        title: qsTr("Lock screen")
+
+        ConfigSwitch {
+            buttonIcon: "login"
+            text: qsTr("Lock right after logging in (hyprlock)")
+            checked: Config.options.lock.launchOnStartup
+            onCheckedChanged: Config.options.lock.launchOnStartup = checked
+        }
+    }
+}

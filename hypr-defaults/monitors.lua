@@ -1,0 +1,1 @@
+-- Monitor layout is machine specific; configure with nwg-displays or edit this file

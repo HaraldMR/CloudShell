@@ -1,0 +1,37 @@
+# Matugen config used by cloudshell.
+# Run by skwd-wall (Settings > Theme > engine: Matugen, config: this file),
+# or directly by ~/.config/quickshell/cloudshell/scripts/theme/apply.sh when skwd-wall is not installed.
+# Every target is optional: delete a [templates.*] block if that app isn't used on a machine.
+
+[config]
+version_check = false
+
+[templates.cloudshell]
+input_path = '~/.config/cloudshell/matugen/templates/cloudshell-colors.json'
+output_path = '~/.local/state/cloudshell/colors.json'
+post_hook = '~/.config/cloudshell/matugen/hooks/apply-gtk.sh'
+
+[templates.hyprland]
+input_path = '~/.config/cloudshell/matugen/templates/hyprland-colors.lua'
+output_path = '~/.config/hypr/hyprland/colors.lua'
+
+[templates.hyprlock]
+input_path = '~/.config/cloudshell/matugen/templates/hyprlock-colors.conf'
+output_path = '~/.config/hypr/hyprlock/colors.conf'
+
+[templates.gtk3]
+input_path = '~/.config/cloudshell/matugen/templates/gtk3.css'
+output_path = '~/.config/gtk-3.0/gtk.css'
+
+[templates.gtk4]
+input_path = '~/.config/cloudshell/matugen/templates/gtk4.css'
+output_path = '~/.config/gtk-4.0/gtk.css'
+
+[templates.fuzzel]
+input_path = '~/.config/cloudshell/matugen/templates/fuzzel.ini'
+output_path = '~/.config/fuzzel/fuzzel_theme.ini'
+
+[templates.kde]
+input_path = '~/.config/cloudshell/matugen/templates/kde.colors'
+output_path = '~/.local/state/cloudshell/kde.colors'
+post_hook = '~/.config/cloudshell/matugen/hooks/apply-kde.sh'

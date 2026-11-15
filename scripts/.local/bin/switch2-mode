@@ -1,0 +1,47 @@
+#!/usr/bin/env bash
+# switch2-mode: let this PC act as Bluetooth headphones for the Nintendo Switch 2.
+#   switch2-mode on      enable Switch mode (then connect "Crumpf" from the Switch)
+#   switch2-mode off     back to normal Bluetooth use
+#   switch2-mode status  show current mode
+# Details: ~/.local/share/switch2-bt/README.md
+set -euo pipefail
+
+SWITCH_MAC="AC:FA:E4:D4:E5:22"
+WP_CONF="$HOME/.config/wireplumber/wireplumber.conf.d/95-switch2-sink-only.conf"
+
+is_on() { [[ -f "$WP_CONF" ]] || systemctl --user is-active -q switch2-agent.service; }
+
+case "${1:-status}" in
+on)
+    mkdir -p "$(dirname "$WP_CONF")"
+    cat > "$WP_CONF" <<'EOF'
+# Written by `switch2-mode on`, removed by `switch2-mode off`.
+# The Switch 2 hangs up if the PC offers A2DP source endpoints; offer only an SBC sink.
+monitor.bluez.properties = {
+  bluez5.roles = [ a2dp_sink ]
+  bluez5.codecs = [ sbc ]
+}
+EOF
+    systemctl --user restart wireplumber
+    sleep 2
+    systemctl --user restart switch2-agent.service
+    echo "Switch mode ON."
+    echo "On the Switch 2: System Settings > Bluetooth Audio > connect \"$(bluetoothctl show | sed -n 's/^\s*Alias: //p')\"."
+    echo "(First time / after removing it on the Switch: use Pair Device within 3 minutes.)"
+    echo "Other Bluetooth audio devices won't work until: switch2-mode off"
+    ;;
+off)
+    bluetoothctl disconnect "$SWITCH_MAC" >/dev/null 2>&1 || true
+    systemctl --user stop switch2-agent.service 2>/dev/null || true
+    rm -f "$WP_CONF"
+    systemctl --user restart wireplumber
+    echo "Switch mode OFF. Normal Bluetooth use restored."
+    ;;
+status)
+    if is_on; then echo "Switch mode: ON"; else echo "Switch mode: OFF"; fi
+    ;;
+*)
+    echo "Usage: switch2-mode on|off|status" >&2
+    exit 1
+    ;;
+esac
