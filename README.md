@@ -1,4 +1,4 @@
-# dotfiles
+# CloudShell
 
 Personal desktop setup: Hyprland + **cloudshell** (a Quickshell config), themed from the wallpaper.
 Managed with GNU stow, so every folder at the top level is a "package" that gets symlinked into `~`.
