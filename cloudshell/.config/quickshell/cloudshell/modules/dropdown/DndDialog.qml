@@ -21,9 +21,6 @@ WindowDialog {
     WindowDialogTitle {
         text: qsTr("Do Not Disturb")
     }
-    WindowDialogParagraph {
-        text: qsTr("Notifications still arrive in the shade, but don't pop up. Critical ones still show.")
-    }
     WindowDialogSeparator {}
     ColumnLayout {
         Layout.fillWidth: true
