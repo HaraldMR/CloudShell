@@ -1,7 +1,9 @@
-# dotfiles
+# CloudShell
 
 Personal desktop setup: Hyprland + **cloudshell** (a Quickshell config), themed from the wallpaper.
 Managed with GNU stow, so every folder at the top level is a "package" that gets symlinked into `~`.
+
+The Quickshell config is modified and stripped down modules from https://github.com/end-4/dots-hyprland .
 
 | Package | What it links |
 |---|---|
@@ -11,7 +13,7 @@ Managed with GNU stow, so every folder at the top level is a "package" that gets
 | `hypr` | `~/.config/hypr`: `hyprland.lua` loads one file per area from `hyprland/` (variables, env, execs, general, animations, rules, keybinds). Generated files stay local: `colors.lua` (matugen, default in `hypr-defaults/`) and `hyprmoncfg-monitors.lua` (monitors + workspace placement) |
 | `kitty`, `fish` | terminal + shell config |
 | `scripts` | `~/.local/bin`: `switch2-mode` |
-| `packages/` | package lists (`arch-repo.txt`, `aur.txt`, `debian.txt`, `flatpak.txt`) and the ii transition scripts |
+| `packages/` | package lists (`arch-repo.txt`, `aur.txt`, `debian.txt`, `flatpak.txt`) |
 
 ## New machine
 
@@ -20,20 +22,14 @@ git clone <this repo> ~/.config/dotfiles
 ~/.config/dotfiles/install.sh           # packages, links, skwd-wall setup, imports ii settings if present
 ```
 
-`./install.sh --links` only (re)creates the symlinks. Everything installs from the official repos or the AUR
-(`-bin` packages), so a normal `cachy-update` keeps it all up to date.
-
-## Which Quickshell config runs
-
-`qsConfig` in `hypr/hyprland/variables.lua` (cloudshell). Shell keybinds dispatch Hyprland global shortcuts
-(`quickshell:<name>`) that cloudshell registers. ii (end-4) was retired on 2026-11-15.
+`./install.sh --links` only (re)creates the symlinks.
 
 ## How cloudshell is put together
 
 ```
 cloudshell/
 ├─ shell.qml            loads each module if enabled ("auto" = only when its programs are installed)
-├─ Shortcuts.qml        global shortcuts (quickshell:<name>) and IPC targets used by the Hyprland binds
+├─ Shortcuts.qml        global shortcuts used by the Hyprland keybinds
 ├─ settings.qml         `qs -p settings.qml` forwards to the in-shell settings window
 ├─ core/                Config (~/.config/cloudshell/config.json), Appearance (Material 3 tokens), Persistent state
 ├─ services/            Audio, Network, Notifications, Theme, Deps (program detection), Wallpaper (skwd-wall), ...
@@ -56,14 +52,7 @@ wallpaper in Settings > Wallpaper & style and press "Regenerate colours".
 
 ### Machine-specific settings
 
-`~/.config/cloudshell/config.json` is not in the repo. It holds per-machine things like the line-in device names,
-Hue bridge file, quick-toggle layout and notification rules. `~/.config/hue/bridge.env` (Hue API key) is also
-kept out of git; see `cloudshell/.config/quickshell/cloudshell/scripts/hue/hueLight.sh` for its format.
-
-## Leaving ii behind
-
-`packages/stage-a.sh` swapped the end-4 packages for repo/AUR ones without removing anything.
-`packages/stage-b.sh` removes what only ii used (packages, venv, installer cache). It asks before every step.
+`~/.config/cloudshell/config.json` is not in the repo. It holds per-machine things like the line-in device names, quick-toggle layout and notification rules.
 
 ## Formatting
 
