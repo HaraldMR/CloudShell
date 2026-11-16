@@ -8,9 +8,7 @@ import Quickshell.Hyprland
 import Quickshell.Io
 
 /**
- * Shortcut names that the (unchanged) Hyprland config from ii dispatches, mapped to cloudshell.
- * Names ii had that cloudshell dropped (left sidebar, cheatsheet, OSK, Lens, translator, ...)
- * are simply not registered, so those binds do nothing.
+ * Global shortcuts (quickshell:<name> in Hyprland) and IPC targets that don't belong to a single module.
  */
 Scope {
     id: root
@@ -26,24 +24,12 @@ Scope {
         onPressed: root.lock()
     }
 
-    // Super+N in the ii keybinds
-    GlobalShortcut {
-        name: "sidebarRightToggle"
-        description: "Toggles the dropdown"
-        onPressed: GlobalStates.dropdownOpen = !GlobalStates.dropdownOpen
-    }
     GlobalShortcut {
         name: "dropdownToggle"
         description: "Toggles the dropdown"
         onPressed: GlobalStates.dropdownOpen = !GlobalStates.dropdownOpen
     }
 
-    // Super+G in the ii keybinds
-    GlobalShortcut {
-        name: "overlayToggle"
-        description: "Toggles the game bar"
-        onPressed: GlobalStates.gameBarOpen = !GlobalStates.gameBarOpen
-    }
     GlobalShortcut {
         name: "gameBarToggle"
         description: "Toggles the game bar"

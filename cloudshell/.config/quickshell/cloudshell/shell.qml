@@ -29,7 +29,7 @@ ShellRoot {
     id: root
 
     ReloadPopup {}
-    CompatShortcuts {}
+    Shortcuts {}
 
     Component.onCompleted: {
         Theme.load();

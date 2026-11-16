@@ -1,1 +1,0 @@
--- Workspace rules are machine specific

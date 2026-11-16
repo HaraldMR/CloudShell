@@ -62,6 +62,7 @@ xdg-desktop-portal-kde
 gnome-keyring
 xdg-user-dirs
 stow
+stylua
 git
 
 # --- Used by the (unchanged) Hyprland config ---

@@ -61,8 +61,8 @@ setup_skwd() {
         | .defaultMatugenConfig = $m' "$cfg" >"$tmp" && mv "$tmp" "$cfg"
     chmod 600 "$cfg"
     systemctl --user daemon-reload
-    echo ":: skwd-wall uses matugen with ~/.config/cloudshell/matugen/config.toml"
-    echo "   The wallpaper daemon (skwd-walld) is started by cloudshell-switch."
+    systemctl --user enable skwd-walld.service
+    echo ":: skwd-wall uses matugen with ~/.config/cloudshell/matugen/config.toml; its daemon starts at login"
 }
 
 case "$mode" in
@@ -74,7 +74,7 @@ all)
     setup_skwd
     ~/.config/quickshell/cloudshell/scripts/migrate-from-ii.sh || true
     echo
-    echo ":: Done. Switch shells with:  cloudshell-switch cloudshell   (or: cloudshell-switch ii)"
+    echo ":: Done. Log out and back in to start Hyprland with cloudshell."
     ;;
 *)
     echo "Usage: ./install.sh [--links | --adopt]" >&2

@@ -1,4 +1,7 @@
--- MONITOR CONFIG
+-- Input, layout, look and behaviour
+-- Border colours come from hyprland/colors.lua (matugen)
+
+-- Fallback for monitors hyprmoncfg doesn't know about
 hl.monitor({
 	output = "",
 	mode = "preferred",
@@ -6,61 +9,35 @@ hl.monitor({
 	scale = 1,
 })
 
-hl.gesture({
-	fingers = 3,
-	direction = "swipe",
-	action = "move",
-})
-hl.gesture({
-	fingers = 3,
-	direction = "pinch",
-	action = "fullscreen",
-})
-hl.gesture({
-	fingers = 4,
-	direction = "horizontal",
-	action = "workspace",
-})
-hl.gesture({
-	fingers = 4,
-	direction = "up",
-	action = function()
-		hl.dispatch(hl.dsp.global("quickshell:overviewWorkspacesToggle"))
-	end,
-})
-hl.gesture({
-	fingers = 4,
-	direction = "down",
-	action = function()
-		hl.dispatch(hl.dsp.global("quickshell:overviewWorkspacesToggle"))
-	end,
-})
-
 hl.config({
-	gestures = {
-		workspace_swipe_distance = 700,
-		workspace_swipe_cancel_ratio = 0.2,
-		workspace_swipe_min_speed_to_force = 5,
-		workspace_swipe_direction_lock = true,
-		workspace_swipe_direction_lock_threshold = 10,
-		workspace_swipe_create_new = true,
-	},
-	general = {
-		-- Gaps and border
-		gaps_in = 4,
-		gaps_out = 5,
-		gaps_workspaces = 50,
+	input = {
+		kb_layout = "no",
+		numlock_by_default = true,
+		repeat_delay = 250,
+		repeat_rate = 35,
 
-		border_size = 1,
+		follow_mouse = 1,
+		off_window_axis_events = 2,
+		accel_profile = "flat",
 
-		col = {
-			active_border = "rgba(0DB7D455)",
-			inactive_border = "rgba(31313600)",
+		touchpad = {
+			natural_scroll = true,
+			disable_while_typing = true,
+			clickfinger_behavior = true,
+			scroll_factor = 0.7,
 		},
+	},
+
+	general = {
+		gaps_in = 2,
+		gaps_out = 0,
+		gaps_workspaces = 50,
+		border_size = 0,
 		resize_on_border = true,
 
 		no_focus_fallback = true,
-		allow_tearing = true, -- This just allows the `immediate` window rule to work
+		allow_tearing = true, -- lets the `immediate` window rule work
+
 		snap = {
 			enabled = true,
 			window_gap = 4,
@@ -68,11 +45,10 @@ hl.config({
 			respect_gaps = true,
 		},
 	},
+
 	decoration = {
-		-- 2 = circle, higher = squircle, 4 = very obvious squircle
-		-- Fuck clearly visible squircles. 100% Apple brainrot.
-		rounding_power = 2.5,
-		rounding = 18,
+		rounding = 5,
+		rounding_power = 2.5, -- 2 = circle, higher = squircle
 
 		blur = {
 			enabled = true,
@@ -91,6 +67,7 @@ hl.config({
 			input_methods = true,
 			input_methods_ignorealpha = 0.8,
 		},
+
 		shadow = {
 			enabled = true,
 			range = 20,
@@ -98,175 +75,27 @@ hl.config({
 			render_power = 4,
 			color = "rgba(00000020)",
 		},
-		-- Dim
-		dim_inactive = true,
-		dim_strength = 0.05,
-		dim_special = 0.2,
+
+		dim_inactive = false,
 	},
+
 	animations = {
 		enabled = true,
 	},
+
 	dwindle = {
 		preserve_split = true,
 		smart_split = false,
 		smart_resizing = false,
-		-- precise_mouse_move = true,
 	},
-})
--- Curves
-hl.curve("expressiveFastSpatial", {
-	type = "bezier",
-	points = { { 0.42, 1.67 }, { 0.21, 0.90 } },
-})
-hl.curve("expressiveSlowSpatial", {
-	type = "bezier",
-	points = { { 0.39, 1.29 }, { 0.35, 0.98 } },
-})
-hl.curve("expressiveDefaultSpatial", {
-	type = "bezier",
-	points = { { 0.38, 1.21 }, { 0.22, 1.00 } },
-})
-hl.curve("emphasizedDecel", {
-	type = "bezier",
-	points = { { 0.05, 0.7 }, { 0.1, 1 } },
-})
-hl.curve("emphasizedAccel", {
-	type = "bezier",
-	points = { { 0.3, 0 }, { 0.8, 0.15 } },
-})
-hl.curve("standardDecel", {
-	type = "bezier",
-	points = { { 0, 0 }, { 0, 1 } },
-})
-hl.curve("menu_decel", {
-	type = "bezier",
-	points = { { 0.1, 1 }, { 0, 1 } },
-})
-hl.curve("menu_accel", {
-	type = "bezier",
-	points = { { 0.52, 0.03 }, { 0.72, 0.08 } },
-})
-hl.curve("stall", {
-	type = "bezier",
-	points = { { 1, -0.1 }, { 0.7, 0.85 } },
-})
--- Configs
--- windows
-hl.animation({
-	leaf = "windowsIn",
-	enabled = true,
-	speed = 3,
-	bezier = "emphasizedDecel",
-	style = "popin 80%",
-})
-hl.animation({
-	leaf = "fadeIn",
-	enabled = true,
-	speed = 3,
-	bezier = "emphasizedDecel",
-})
-hl.animation({
-	leaf = "windowsOut",
-	enabled = true,
-	speed = 2,
-	bezier = "emphasizedDecel",
-	style = "popin 90%",
-})
-hl.animation({
-	leaf = "fadeOut",
-	enabled = true,
-	speed = 2,
-	bezier = "emphasizedDecel",
-})
-hl.animation({
-	leaf = "windowsMove",
-	enabled = true,
-	speed = 3,
-	bezier = "emphasizedDecel",
-	style = "slide",
-})
-hl.animation({
-	leaf = "border",
-	enabled = true,
-	speed = 10,
-	bezier = "emphasizedDecel",
-})
 
--- layers
-hl.animation({
-	leaf = "layersIn",
-	enabled = true,
-	speed = 2.7,
-	bezier = "emphasizedDecel",
-	style = "popin 93%",
-})
-hl.animation({
-	leaf = "layersOut",
-	enabled = true,
-	speed = 2.4,
-	bezier = "menu_accel",
-	style = "popin 94%",
-})
--- fade
-hl.animation({
-	leaf = "fadeLayersIn",
-	enabled = true,
-	speed = 0.5,
-	bezier = "menu_decel",
-})
-hl.animation({
-	leaf = "fadeLayersOut",
-	enabled = true,
-	speed = 2.7,
-	bezier = "stall",
-})
--- workspaces
-hl.animation({
-	leaf = "workspaces",
-	enabled = true,
-	speed = 7,
-	bezier = "menu_decel",
-	style = "slide",
-})
--- specialWorkspace
-hl.animation({
-	leaf = "specialWorkspaceIn",
-	enabled = true,
-	speed = 2.8,
-	bezier = "emphasizedDecel",
-	style = "slidevert",
-})
-hl.animation({
-	leaf = "specialWorkspaceOut",
-	enabled = true,
-	speed = 1.2,
-	bezier = "emphasizedAccel",
-	style = "slidevert",
-})
--- zoom
-hl.animation({
-	leaf = "zoomFactor",
-	enabled = true,
-	speed = 3,
-	bezier = "standardDecel",
-})
-
-hl.config({
-	input = {
-		kb_layout = "us",
-		numlock_by_default = true,
-		repeat_delay = 250,
-		repeat_rate = 35,
-
-		follow_mouse = 1,
-		off_window_axis_events = 2,
-
-		touchpad = {
-			natural_scroll = true,
-			disable_while_typing = true,
-			clickfinger_behavior = true,
-			scroll_factor = 0.7,
-		},
+	gestures = {
+		workspace_swipe_distance = 700,
+		workspace_swipe_cancel_ratio = 0.2,
+		workspace_swipe_min_speed_to_force = 5,
+		workspace_swipe_direction_lock = true,
+		workspace_swipe_direction_lock_threshold = 10,
+		workspace_swipe_create_new = true,
 	},
 
 	misc = {
@@ -278,7 +107,6 @@ hl.config({
 		animate_manual_resizes = false,
 		animate_mouse_windowdragging = false,
 		enable_swallow = false,
-		swallow_regex = "(foot|kitty|allacritty|Alacritty)",
 		on_focus_under_fullscreen = 2,
 		allow_session_lock_restore = true,
 		session_lock_xray = true,
@@ -301,4 +129,23 @@ hl.config({
 	xwayland = {
 		force_zero_scaling = true,
 	},
+})
+
+-- Touchpad gestures (laptops)
+hl.gesture({ fingers = 3, direction = "swipe", action = "move" })
+hl.gesture({ fingers = 3, direction = "pinch", action = "fullscreen" })
+hl.gesture({ fingers = 4, direction = "horizontal", action = "workspace" })
+hl.gesture({
+	fingers = 4,
+	direction = "up",
+	action = function()
+		hl.dispatch(hl.dsp.global("quickshell:overviewWorkspacesToggle"))
+	end,
+})
+hl.gesture({
+	fingers = 4,
+	direction = "down",
+	action = function()
+		hl.dispatch(hl.dsp.global("quickshell:overviewWorkspacesToggle"))
+	end,
 })

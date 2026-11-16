@@ -8,9 +8,9 @@ Managed with GNU stow, so every folder at the top level is a "package" that gets
 | `cloudshell` | `~/.config/quickshell/cloudshell` – the shell |
 | `theming` | `~/.config/cloudshell/matugen` – matugen config + templates (shell, Hyprland, hyprlock, GTK, KDE/Qt, fuzzel) |
 | `fonts` | Google Sans Flex (OFL, bundled so no package is needed) |
-| `hypr` | `~/.config/hypr` (generated/machine-specific files are left local, defaults in `hypr-defaults/`) |
+| `hypr` | `~/.config/hypr`: `hyprland.lua` loads one file per area from `hyprland/` (variables, env, execs, general, animations, rules, keybinds). Generated files stay local: `colors.lua` (matugen, default in `hypr-defaults/`) and `hyprmoncfg-monitors.lua` (monitors + workspace placement) |
 | `kitty`, `fish` | terminal + shell config |
-| `scripts` | `~/.local/bin`: `cloudshell-switch`, `switch2-mode` |
+| `scripts` | `~/.local/bin`: `switch2-mode` |
 | `packages/` | package lists (`arch-repo.txt`, `aur.txt`, `debian.txt`, `flatpak.txt`) and the ii transition scripts |
 
 ## New machine
@@ -18,26 +18,22 @@ Managed with GNU stow, so every folder at the top level is a "package" that gets
 ```sh
 git clone <this repo> ~/.config/dotfiles
 ~/.config/dotfiles/install.sh           # packages, links, skwd-wall setup, imports ii settings if present
-cloudshell-switch cloudshell    # start it (or log out and back in)
 ```
 
 `./install.sh --links` only (re)creates the symlinks. Everything installs from the official repos or the AUR
 (`-bin` packages), so a normal `cachy-update` keeps it all up to date.
 
-## Switching Quickshell configs
+## Which Quickshell config runs
 
-Cloudshell is the default (`qsConfig` in `hypr/hyprland/variables.lua`). ii was retired on 2026-11-15; its
-config and state are archived in `~/dotfiles-backup/ii-archive-2026-11-15.tar.gz`.
-`cloudshell-switch <config> | status` still works for any other config in `~/.config/quickshell/`: it rewrites
-the `qsConfig` line in `~/.config/hypr/custom/variables.lua`, starts/stops the skwd-wall daemon and restarts
-Quickshell. The Hyprland keybinds use the shortcut names ii used, which cloudshell answers to.
+`qsConfig` in `hypr/hyprland/variables.lua` (cloudshell). Shell keybinds dispatch Hyprland global shortcuts
+(`quickshell:<name>`) that cloudshell registers. ii (end-4) was retired on 2026-11-15.
 
 ## How cloudshell is put together
 
 ```
 cloudshell/
 ├─ shell.qml            loads each module if enabled ("auto" = only when its programs are installed)
-├─ CompatShortcuts.qml  shortcut names from the ii Hyprland config, mapped to cloudshell
+├─ Shortcuts.qml        global shortcuts (quickshell:<name>) and IPC targets used by the Hyprland binds
 ├─ settings.qml         `qs -p settings.qml` forwards to the in-shell settings window
 ├─ core/                Config (~/.config/cloudshell/config.json), Appearance (Material 3 tokens), Persistent state
 ├─ services/            Audio, Network, Notifications, Theme, Deps (program detection), Wallpaper (skwd-wall), ...
@@ -68,3 +64,8 @@ kept out of git; see `cloudshell/.config/quickshell/cloudshell/scripts/hue/hueLi
 
 `packages/stage-a.sh` swapped the end-4 packages for repo/AUR ones without removing anything.
 `packages/stage-b.sh` removes what only ii used (packages, venv, installer cache). It asks before every step.
+
+## Formatting
+
+Lua files are formatted with [stylua](https://github.com/JohnnyMorganz/StyLua) using `.stylua.toml`:
+`stylua hypr/`
