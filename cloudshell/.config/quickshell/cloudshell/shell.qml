@@ -9,6 +9,7 @@
 import qs.core
 import qs.services
 import qs.core.functions
+import qs.modules.background
 import qs.modules.bar
 import qs.modules.calendar
 import qs.modules.dropdown
@@ -56,6 +57,7 @@ ShellRoot {
         active: Config.ready && Deps.moduleEnabled(name)
     }
 
+    Module { name: "background"; component: Background {} }
     Module { name: "bar"; component: Bar {} }
     Module { name: "calendar"; component: CalendarDropdown {} }
     Module { name: "dropdown"; component: Dropdown {} }

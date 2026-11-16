@@ -42,10 +42,14 @@ Singleton {
     }
 
     // Regenerate with matugen (used for light/dark switching and when skwd-wall isn't installed)
-    function regenerate() {
+    // image: optional; by default the current skwd-wall wallpaper, else theme.fallbackWallpaper
+    function regenerate(image) {
         if (!root.canGenerate)
             return;
-        Quickshell.execDetached([Directories.themeScriptPath, "--mode", Config.options.theme.mode, "--type", Config.options.theme.scheme]);
+        const args = [Directories.themeScriptPath, "--mode", Config.options.theme.mode, "--type", Config.options.theme.scheme];
+        if (image)
+            args.push("--image", image);
+        Quickshell.execDetached(args);
     }
 
     function setMode(mode) {

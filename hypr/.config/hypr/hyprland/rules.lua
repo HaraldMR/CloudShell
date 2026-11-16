@@ -125,6 +125,8 @@ layerRule("quickshell:overview", { no_anim = true })
 layerRule("quickshell:polkit", { no_anim = true })
 layerRule("quickshell:regionSelector", { no_anim = true })
 layerRule("quickshell:session", { blur = true, no_anim = true, ignore_alpha = 0 })
+-- Wallpaper drawn by the shell when skwd-wall isn't running
+layerRule("cloudshell:background", { no_anim = true, xray = false })
 -- These animate themselves
 layerRule("cloudshell:dropdown", { no_anim = true })
 layerRule("cloudshell:calendar", { no_anim = true })

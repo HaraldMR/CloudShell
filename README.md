@@ -47,8 +47,9 @@ is missing and which package provides it.
 
 skwd-wall applies the wallpaper and runs matugen with `~/.config/cloudshell/matugen/config.toml`.
 Matugen writes `~/.local/state/cloudshell/colors.json` (the shell reloads it live) and themes Hyprland borders,
-hyprlock, GTK 3/4 (adw-gtk3) and Qt/KDE apps (`plasma-apply-colorscheme`). Without skwd-wall, set a fallback
-wallpaper in Settings > Wallpaper & style and press "Regenerate colours".
+hyprlock, GTK 3/4 (adw-gtk3) and Qt/KDE apps (`plasma-apply-colorscheme`). If skwd-wall is installed but its daemon
+isn't running, the shell starts it. Without skwd-wall, pick an image in Settings > Wallpaper & style: the shell
+draws it on every monitor itself and generates the colours from it.
 
 ### Machine-specific settings
 

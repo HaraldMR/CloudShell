@@ -75,6 +75,7 @@ Singleton {
             // "auto": enabled when the programs it needs are installed (see Deps)
             // true / false: force on or off
             property JsonObject modules: JsonObject {
+                property var background: true // only draws when skwd-wall isn't running
                 property var bar: true
                 property var dropdown: true
                 property var calendar: true

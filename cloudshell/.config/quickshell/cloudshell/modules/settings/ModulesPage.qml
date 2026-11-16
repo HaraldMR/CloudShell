@@ -10,6 +10,7 @@ ContentPage {
     forceWidth: true
 
     readonly property list<var> modules: [
+        { "id": "background", "name": qsTr("Wallpaper without skwd-wall"), "icon": "image" },
         { "id": "bar", "name": qsTr("Top bar"), "icon": "toolbar" },
         { "id": "dropdown", "name": qsTr("Quick settings dropdown"), "icon": "toggle_on" },
         { "id": "calendar", "name": qsTr("Calendar dropdown"), "icon": "calendar_month" },
