@@ -18,6 +18,8 @@ LazyLoader {
     component: PanelWindow {
         id: popupWindow
         color: "transparent"
+        // Same monitor as the bar the hovered item is on
+        screen: root.QsWindow?.window?.screen ?? null
 
         anchors.left: !Config.options.bar.vertical || (Config.options.bar.vertical && !Config.options.bar.bottom)
         anchors.right: Config.options.bar.vertical && Config.options.bar.bottom
@@ -35,11 +37,12 @@ LazyLoader {
         exclusiveZone: 0
         margins {
             left: {
-                if (!Config.options.bar.vertical) return root.QsWindow?.mapFromItem(
-                    root.hoverTarget, 
-                    (root.hoverTarget.width - popupBackground.implicitWidth) / 2, 0
-                ).x;
-                return Appearance.sizes.verticalBarWidth
+                if (Config.options.bar.vertical)
+                    return Appearance.sizes.verticalBarWidth;
+                // Centred under the hovered item, but kept fully on screen
+                const centred = root.QsWindow?.mapFromItem(root.hoverTarget, (root.hoverTarget.width - popupBackground.implicitWidth) / 2, 0).x - Appearance.sizes.elevationMargin;
+                const maxLeft = (popupWindow.screen?.width ?? 1920) - popupWindow.implicitWidth;
+                return Math.max(0, Math.min(centred, maxLeft));
             }
             top: {
                 if (!Config.options.bar.vertical) return Appearance.sizes.barHeight;

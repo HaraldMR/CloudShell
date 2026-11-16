@@ -239,13 +239,15 @@ Item { // Bar content region
                     iconSize: Appearance.font.pixelSize.larger
                     color: dropdownButton.colText
                 }
-                BatteryIndicator {
-                    Layout.leftMargin: indicatorsRowLayout.realSpacing
-                    Layout.alignment: Qt.AlignVCenter
-                    visible: Battery.available
-                    implicitHeight: indicatorsRowLayout.implicitHeight
-                }
             }
+        }
+
+        // Battery sits outside the dropdown button, left of the network/bluetooth icons
+        BatteryIndicator {
+            Layout.alignment: Qt.AlignVCenter
+            Layout.leftMargin: 4
+            Layout.rightMargin: 4
+            visible: Battery.available
         }
 
         SysTray {
