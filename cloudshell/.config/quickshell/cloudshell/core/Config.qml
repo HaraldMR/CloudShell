@@ -192,6 +192,15 @@ Singleton {
                     property bool stats: false
                     property bool notifications: true
                 }
+                // Which resources the usage row shows (when sections.stats is on)
+                property JsonObject stats: JsonObject {
+                    property bool cpu: true
+                    property bool gpu: false
+                    property bool ram: true
+                    property bool swap: false
+                    property bool disk: true
+                    property bool network: false
+                }
                 property int columns: 4
                 // Each toggle: { type: string, size: 1 | 2 }. Types: network, bluetooth, audio, mic,
                 // notifications, idleInhibitor, powerProfile, monitorLineIn, switch2Mode, hueLight

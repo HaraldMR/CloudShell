@@ -31,9 +31,55 @@ ContentPage {
         }
         ConfigSwitch {
             buttonIcon: "monitoring"
-            text: qsTr("CPU / RAM / disk usage")
+            text: qsTr("Resource usage")
             checked: Config.options.dropdown.sections.stats
             onCheckedChanged: Config.options.dropdown.sections.stats = checked
+        }
+        Flow {
+            Layout.fillWidth: true
+            Layout.leftMargin: 40
+            visible: Config.options.dropdown.sections.stats
+            spacing: 6
+            Repeater {
+                model: [
+                    { "key": "cpu", "label": qsTr("CPU"), "icon": "developer_board" },
+                    { "key": "gpu", "label": qsTr("GPU"), "icon": "memory" },
+                    { "key": "ram", "label": qsTr("RAM"), "icon": "memory_alt" },
+                    { "key": "swap", "label": qsTr("Swap"), "icon": "swap_horiz" },
+                    { "key": "disk", "label": qsTr("Disk"), "icon": "hard_drive" },
+                    { "key": "network", "label": qsTr("Network"), "icon": "swap_vert" }
+                ]
+                delegate: RippleButton {
+                    id: statChip
+                    required property var modelData
+                    toggled: Config.options.dropdown.stats[modelData.key]
+                    onClicked: Config.options.dropdown.stats[modelData.key] = !toggled
+                    implicitHeight: 34
+                    implicitWidth: chipRow.implicitWidth + 24
+                    buttonRadius: Appearance.rounding.full
+                    colBackground: Appearance.colors.colLayer2
+                    colBackgroundHover: Appearance.colors.colLayer2Hover
+                    colBackgroundToggled: Appearance.colors.colSecondaryContainer
+                    colBackgroundToggledHover: Appearance.colors.colSecondaryContainerHover
+                    contentItem: Item {
+                        RowLayout {
+                            id: chipRow
+                            anchors.centerIn: parent
+                            spacing: 6
+                            MaterialSymbol {
+                                text: statChip.toggled ? "check" : statChip.modelData.icon
+                                iconSize: Appearance.font.pixelSize.large
+                                color: statChip.toggled ? Appearance.colors.colOnSecondaryContainer : Appearance.colors.colOnLayer2
+                            }
+                            StyledText {
+                                text: statChip.modelData.label
+                                font.pixelSize: Appearance.font.pixelSize.small
+                                color: statChip.toggled ? Appearance.colors.colOnSecondaryContainer : Appearance.colors.colOnLayer2
+                            }
+                        }
+                    }
+                }
+            }
         }
         ConfigSwitch {
             buttonIcon: "notifications"

@@ -126,7 +126,7 @@ DropdownWindow {
         StatsRow {
             id: stats
             Layout.fillWidth: true
-            visible: Config.options.dropdown.sections.stats
+            visible: Config.options.dropdown.sections.stats && count > 0
         }
 
         NotificationShade {

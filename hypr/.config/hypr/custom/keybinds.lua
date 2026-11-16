@@ -9,12 +9,6 @@ local hyprScripts = "$HOME/.config/hypr/hyprland/scripts"
 local qsIpcCall = "qs -c $qsConfig ipc call"
 local qsIsAlive = qsIpcCall .. " TEST_ALIVE"
 
-hl.bind(
-	"CTRL+SUPER+ALT+Slash",
-	hl.dsp.exec_cmd("xdg-open ~/.config/hypr/custom/keybinds.lua"),
-	{ description = "Edit user keybinds" }
-)
-
 --# Fullscreen screenshot
 local grimhyprctl = "grim -o  \"$(hyprctl activeworkspace -j | jq -r '.monitor')\""
 hl.bind(
