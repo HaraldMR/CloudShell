@@ -15,8 +15,11 @@ require("hyprland.rules")
 require("hyprland.colors")
 require("hyprland.keybinds")
 
--- This device's own settings (not in the repo); see local.example.lua
-dofile_if_exists(HOME .. "/.config/hypr/local.lua")
+-- This device's own settings (not in the repo); see local.example.lua.
+-- Loaded with require (not dofile) so Hyprland reloads automatically when it's edited.
+if file_exists(HOME .. "/.config/hypr/local.lua") then
+	require("local")
+end
 
 -- Monitors (hyprmoncfg). The two lines below are hyprmoncfg's own; keep them verbatim or it re-adds them.
 -- stylua: ignore start
