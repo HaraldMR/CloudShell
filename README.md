@@ -11,6 +11,7 @@ The Quickshell config is modified and stripped down modules from https://github.
 | `theming` | `~/.config/cloudshell/matugen` – matugen config + templates (shell, Hyprland, hyprlock, GTK, KDE/Qt, fuzzel) |
 | `fonts` | Google Sans Flex (OFL, bundled so no package is needed) |
 | `hypr` | `~/.config/hypr`: `hyprland.lua` loads one file per area from `hyprland/` (variables, env, execs, general, animations, rules, keybinds). Generated files stay local: `colors.lua` (matugen, default in `hypr-defaults/`) and `hyprmoncfg-monitors.lua` (monitors + workspace placement) |
+| | `~/.config/hypr/local.lua`: this device's overrides (app variables, autostart, input devices, extra binds). Not in the repo; `install.sh` creates it from `local.example.lua` |
 | `kitty`, `fish` | terminal + shell config |
 | `scripts` | `~/.local/bin`: `switch2-mode` |
 | `packages/` | package lists (`arch-repo.txt`, `aur.txt`, `debian.txt`, `flatpak.txt`) |

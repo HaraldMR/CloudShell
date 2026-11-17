@@ -2,3 +2,6 @@
 cloudshell/.config/quickshell/cloudshell/.qmlls.ini
 *.bak
 *.new
+
+# Per-device Hyprland overrides (see hypr/.config/hypr/local.example.lua)
+hypr/.config/hypr/local.lua

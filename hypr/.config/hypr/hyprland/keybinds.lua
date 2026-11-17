@@ -311,13 +311,20 @@ hl.bind(
 
 ---------------------------------------------------------------- Apps
 
-hl.bind("SUPER + Return", hl.dsp.exec_cmd(terminal), { description = "App: Terminal" })
-hl.bind("SUPER + E", hl.dsp.exec_cmd(fileManager), { description = "App: File manager" })
-hl.bind("SUPER + C", hl.dsp.exec_cmd(codeEditor), { description = "App: Code editor" })
-hl.bind("SUPER + X", hl.dsp.exec_cmd(textEditor), { description = "App: Text editor" })
-hl.bind("SUPER + W", hl.dsp.exec_cmd(browser .. " --new-window"), { description = "App: Browser" })
-hl.bind("SUPER + SHIFT + W", hl.dsp.exec_cmd(browser .. " --private-window"), { description = "App: Private browser" })
-hl.bind("SUPER + Y", hl.dsp.exec_cmd(musicPlayer), { description = "App: Music" })
-hl.bind("SUPER + I", hl.dsp.exec_cmd(settingsApp), { description = "App: Settings" })
-hl.bind("CTRL + SUPER + V", hl.dsp.exec_cmd(volumeMixer), { description = "App: Volume mixer" })
-hl.bind("CTRL + SHIFT + Escape", hl.dsp.exec_cmd(taskManager), { description = "App: Task manager" })
+-- Reads the variable when the key is pressed, so local.lua can override it
+local function launch(variable)
+	return function()
+		hl.dispatch(hl.dsp.exec_cmd(_G[variable]))
+	end
+end
+
+hl.bind("SUPER + Return", launch("terminal"), { description = "App: Terminal" })
+hl.bind("SUPER + E", launch("fileManager"), { description = "App: File manager" })
+hl.bind("SUPER + C", launch("codeEditor"), { description = "App: Code editor" })
+hl.bind("SUPER + X", launch("textEditor"), { description = "App: Text editor" })
+hl.bind("SUPER + W", launch("browser"), { description = "App: Browser" })
+hl.bind("SUPER + SHIFT + W", launch("privateBrowser"), { description = "App: Private browser" })
+hl.bind("SUPER + Y", launch("musicPlayer"), { description = "App: Music" })
+hl.bind("SUPER + I", launch("settingsApp"), { description = "App: Settings" })
+hl.bind("CTRL + SUPER + V", launch("volumeMixer"), { description = "App: Volume mixer" })
+hl.bind("CTRL + SHIFT + Escape", launch("taskManager"), { description = "App: Task manager" })

@@ -15,7 +15,8 @@ hl.on("hyprland.start", function()
 	hl.exec_cmd("wl-paste --type text --watch bash -c 'cliphist store && qs -c $qsConfig ipc call cliphistService update'")
 	hl.exec_cmd("wl-paste --type image --watch bash -c 'cliphist store && qs -c $qsConfig ipc call cliphistService update'")
 
-	-- Apps
-	hl.exec_cmd("steam")
-	hl.exec_cmd("sleep 10 && vesktop")
+	-- Apps (`autostart` in variables.lua, can be changed per device in local.lua)
+	for _, command in ipairs(autostart or {}) do
+		hl.exec_cmd(command)
+	end
 end)

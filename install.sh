@@ -37,6 +37,8 @@ link() {
     # Whole-folder links for the shell itself; per-file links where programs write generated files next to ours
     stow "${extra[@]}" -t ~ cloudshell fonts theming
     stow "${extra[@]}" --no-folding -t ~ hypr kitty fish scripts
+    # This device's own Hyprland overrides, started from the commented example
+    [[ -e ~/.config/hypr/local.lua ]] || cp hypr/.config/hypr/local.example.lua ~/.config/hypr/local.lua
     # Machine-specific/generated Hyprland files: create defaults if missing
     (cd hypr-defaults && find . -type f) | while read -r f; do
         [[ -e ~/.config/hypr/"$f" ]] || install -D -m 644 "hypr-defaults/$f" ~/.config/hypr/"$f"
