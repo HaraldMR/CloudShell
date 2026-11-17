@@ -135,12 +135,12 @@ Item { // Bar content region
         BarPill {
             id: workspacesPill
             shown: Config.options.bar.pills.workspaces
-            horizontalPadding: 6
+            // Same gap around the workspace circles on all sides
+            horizontalPadding: (pillHeight - workspacesWidget.workspaceButtonWidth) / 2
             anchors.verticalCenter: parent.verticalCenter
 
             Workspaces {
                 id: workspacesWidget
-                Layout.preferredHeight: workspacesPill.pillHeight
                 MouseArea {
                     // Right-click to toggle overview
                     anchors.fill: parent
@@ -170,8 +170,11 @@ Item { // Bar content region
             shown: Config.options.bar.pills.status
             Layout.alignment: Qt.AlignVCenter
             spacing: 5
+            // Match the gap on the right, which comes from the dropdown button's own padding
+            leftPadding: statusTray.visible || Battery.available ? 14 : 3
 
         SysTray {
+            id: statusTray
             visible: !root.narrow
             Layout.fillWidth: false
             Layout.fillHeight: true

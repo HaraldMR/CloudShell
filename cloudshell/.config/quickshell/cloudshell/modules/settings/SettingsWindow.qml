@@ -41,11 +41,19 @@ Scope {
             minimumSize.height: 500
             implicitWidth: 1100
             implicitHeight: 760
-            color: Appearance.surface(Appearance.m3colors.m3background)
+            // The window itself is always transparent and the background is drawn below; a window that
+            // opens solid has no alpha channel, so switching glass on later would render it grey/white.
+            color: "transparent"
             BackgroundEffect.blurRegion: Appearance.glass ? fullRegion : null
             Region {
                 id: fullRegion
-                item: window.contentItem
+                item: windowBackground
+            }
+
+            Rectangle {
+                id: windowBackground
+                anchors.fill: parent
+                color: Appearance.glass ? ColorUtils.transparentize(Appearance.m3colors.m3background, 1 - Math.max(Appearance.glassOpacity, 0.3)) : Appearance.m3colors.m3background
             }
             onVisibleChanged: if (!visible)
                 GlobalStates.settingsOpen = false

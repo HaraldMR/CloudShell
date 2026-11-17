@@ -13,6 +13,8 @@ Item {
     // Per-group switch (bar.pills.clock, .media, ...)
     property bool shown: true
     property real horizontalPadding: 3
+    property real leftPadding: horizontalPadding
+    property real rightPadding: horizontalPadding
     default property alias content: row.data
     property alias spacing: row.spacing
     readonly property bool active: Config.options.bar.pills.enable && shown
@@ -30,7 +32,7 @@ Item {
         }
     }
 
-    implicitWidth: row.implicitWidth + (active ? horizontalPadding * 2 : 0)
+    implicitWidth: row.implicitWidth + (active ? leftPadding + rightPadding : 0)
     implicitHeight: Math.max(row.implicitHeight, pillHeight)
 
     Rectangle {
@@ -58,7 +60,7 @@ Item {
         anchors {
             verticalCenter: parent.verticalCenter
             left: parent.left
-            leftMargin: root.active ? root.horizontalPadding : 0
+            leftMargin: root.active ? root.leftPadding : 0
         }
         spacing: 4
     }
