@@ -11,10 +11,15 @@ import Quickshell
  * Region's own `item` property places the region by the item's position inside its parent, which
  * is wrong for nested items, so the position in the window is computed here and kept up to date
  * when the item or any of its parents move or resize.
+ *
+ * The compositor's blur region is whole pixels with no antialiasing, so its rounded corners are
+ * stair-stepped. It's pulled `inset` pixels inside each surface so those steps stay hidden under
+ * the surface's own smooth (antialiased) edge.
  */
 QtObject {
     id: root
     property list<Item> items: []
+    property real inset: 2
 
     readonly property Region region: Region {
         regions: {
@@ -34,7 +39,7 @@ QtObject {
         delegate: Region {
             id: region
             required property Item modelData
-            radius: modelData?.radius ?? 0
+            radius: Math.max(0, (modelData?.radius ?? 0) - root.inset)
 
             property var watched: []
 
@@ -46,10 +51,10 @@ QtObject {
                     return;
                 }
                 const pos = item.mapToItem(null, 0, 0);
-                region.x = Math.round(pos.x);
-                region.y = Math.round(pos.y);
-                region.width = Math.round(item.width);
-                region.height = Math.round(item.height);
+                region.x = Math.ceil(pos.x + root.inset);
+                region.y = Math.ceil(pos.y + root.inset);
+                region.width = Math.max(0, Math.floor(item.width - root.inset * 2));
+                region.height = Math.max(0, Math.floor(item.height - root.inset * 2));
             }
 
             function watch() {

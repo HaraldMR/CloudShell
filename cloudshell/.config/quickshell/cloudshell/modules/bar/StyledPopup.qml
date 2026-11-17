@@ -54,11 +54,10 @@ LazyLoader {
             right: Appearance.sizes.verticalBarWidth
             bottom: Appearance.sizes.barHeight
         }
-        BackgroundEffect.blurRegion: Appearance.glass ? glassRegion : null
-        Region {
-            id: glassRegion
-            item: popupBackground
-            radius: popupBackground.radius
+        BackgroundEffect.blurRegion: Appearance.glass ? glassBlur.region : null
+        GlassBlur {
+            id: glassBlur
+            items: [popupBackground]
         }
         WlrLayershell.namespace: "quickshell:popup"
         WlrLayershell.layer: WlrLayer.Overlay

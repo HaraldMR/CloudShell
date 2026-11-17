@@ -64,11 +64,10 @@ PanelWindow {
         item: surface
     }
     // Liquid glass: blur what's behind the surface
-    BackgroundEffect.blurRegion: Appearance.glass ? glassRegion : null
-    Region {
-        id: glassRegion
-        item: surface
-        radius: surface.radius
+    BackgroundEffect.blurRegion: Appearance.glass ? glassBlur.region : null
+    GlassBlur {
+        id: glassBlur
+        items: [surface]
     }
 
     function dismiss() {

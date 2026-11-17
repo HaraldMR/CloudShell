@@ -93,11 +93,10 @@ Scope {
         }
         implicitWidth: panel.implicitWidth
         implicitHeight: panel.implicitHeight
-        BackgroundEffect.blurRegion: Appearance.glass ? glassRegion : null
-        Region {
-            id: glassRegion
-            item: panel
-            radius: panel.radius
+        BackgroundEffect.blurRegion: Appearance.glass ? glassBlur.region : null
+        GlassBlur {
+            id: glassBlur
+            items: [panel]
         }
 
         Rectangle {
