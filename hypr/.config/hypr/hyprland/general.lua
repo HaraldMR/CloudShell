@@ -56,9 +56,9 @@ hl.config({
 			special = false,
 			new_optimizations = true,
 			size = 10,
-			passes = 3,
+			passes = 4,
 			brightness = 1,
-			noise = 0.05,
+			noise = 0.01, -- low grain, so clear glass stays smooth
 			contrast = 0.89,
 			vibrancy = 0.5,
 			vibrancy_darkness = 0.5,

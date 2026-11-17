@@ -13,11 +13,6 @@ import qs.widgets
 Scope {
     id: bar
 
-    component PillRegion: Region {
-        required property Item pill
-        item: pill && pill.active && pill.visible ? pill.background : null
-        radius: pill?.background.height / 2 ?? 0
-    }
     property bool showBarBackground: Config.options.bar.showBackground
 
     Variants {
@@ -68,13 +63,10 @@ Scope {
                 }
 
                 // Liquid glass: blur behind the pills
-                BackgroundEffect.blurRegion: Appearance.glass && Config.options.bar.pills.enable ? pillBlurRegion : null
-                Region {
-                    id: pillBlurRegion
-                    PillRegion { pill: barContent.pills[0] }
-                    PillRegion { pill: barContent.pills[1] }
-                    PillRegion { pill: barContent.pills[2] }
-                    PillRegion { pill: barContent.pills[3] }
+                BackgroundEffect.blurRegion: Appearance.glass && Config.options.bar.pills.enable ? glassBlur.region : null
+                GlassBlur {
+                    id: glassBlur
+                    items: barContent.pills.filter(p => p.active && p.visible).map(p => p.background)
                 }
                 color: "transparent"
 
