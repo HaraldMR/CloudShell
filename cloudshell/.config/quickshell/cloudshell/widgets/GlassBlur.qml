@@ -8,18 +8,17 @@ import Quickshell
  *   BackgroundEffect.blurRegion: Appearance.glass ? glassBlur.region : null
  *   GlassBlur { id: glassBlur; items: [card1, card2] }
  *
- * Region's own `item` property places the region by the item's position inside its parent, which
- * is wrong for nested items, so the position in the window is computed here and kept up to date
- * when the item or any of its parents move or resize.
- *
- * The compositor's blur region is whole pixels with no antialiasing, so its rounded corners are
- * stair-stepped. It's pulled `inset` pixels inside each surface so those steps stay hidden under
- * the surface's own smooth (antialiased) edge.
+ * - Position: Region's own `item` places the region by the item's position inside its parent, which
+ *   is wrong for nested items, so the position in the window is computed here and kept up to date.
+ * - Shape: the compositor's blur has no antialiasing, and Region's built-in rounded corners are a
+ *   coarse curve that bulges past the real circle. So each surface is built from 1px strips through
+ *   its rounded corners, every strip cut to lie strictly inside the circle (and `inset` px inside
+ *   the edge), where the surface's own smooth edge covers it.
  */
 QtObject {
     id: root
     property list<Item> items: []
-    property real inset: 2
+    property int inset: 1
 
     readonly property Region region: Region {
         regions: {
@@ -37,62 +36,103 @@ QtObject {
         id: instantiator
         model: root.items
         delegate: Region {
-            id: region
+            id: area
             required property Item modelData
-            radius: Math.max(0, (modelData?.radius ?? 0) - root.inset)
+
+            // Area in window pixels, already inset
+            property int gx: 0
+            property int gy: 0
+            property int gw: 0
+            property int gh: 0
+            readonly property real r: Math.max(0, Math.min((modelData?.radius ?? 0) - root.inset, Math.min(gw, gh) / 2))
+            readonly property int rows: Math.ceil(r)
+
+            // The region itself is empty; the strips make up the shape
+            width: 0
+            height: 0
+            regions: {
+                const result = [];
+                for (let i = 0; i < strips.count; i++) {
+                    const strip = strips.objectAt(i);
+                    if (strip)
+                        result.push(strip);
+                }
+                return result;
+            }
+
+            property Instantiator strips: Instantiator {
+                model: area.gw > 0 && area.gh > 0 ? area.rows * 2 + 1 : 0
+                delegate: Region {
+                    required property int index
+                    readonly property bool middle: index === area.rows
+                    readonly property bool top: index < area.rows
+                    // Rows counted from the outer (top or bottom) edge
+                    readonly property int edgeRow: top ? index : area.rows * 2 - index
+                    // Width cut from each side: where the circle is at this row's outer edge
+                    readonly property int cut: middle ? 0 : Math.ceil(area.r - Math.sqrt(Math.max(0, area.r * area.r - (area.r - edgeRow) * (area.r - edgeRow))))
+                    x: area.gx + cut
+                    width: Math.max(0, area.gw - cut * 2)
+                    y: middle ? area.gy + area.rows : top ? area.gy + index : area.gy + area.gh - 1 - edgeRow
+                    height: middle ? Math.max(0, area.gh - area.rows * 2) : 1
+                }
+            }
 
             property var watched: []
 
             function update() {
-                const item = region.modelData;
+                const item = area.modelData;
                 if (!item || !item.visible || !item.parent) {
-                    region.width = 0;
-                    region.height = 0;
+                    area.gw = 0;
+                    area.gh = 0;
                     return;
                 }
                 const pos = item.mapToItem(null, 0, 0);
-                region.x = Math.ceil(pos.x + root.inset);
-                region.y = Math.ceil(pos.y + root.inset);
-                region.width = Math.max(0, Math.floor(item.width - root.inset * 2));
-                region.height = Math.max(0, Math.floor(item.height - root.inset * 2));
+                const left = Math.ceil(pos.x + root.inset);
+                const topEdge = Math.ceil(pos.y + root.inset);
+                const right = Math.floor(pos.x + item.width - root.inset);
+                const bottom = Math.floor(pos.y + item.height - root.inset);
+                area.gx = left;
+                area.gy = topEdge;
+                area.gw = Math.max(0, right - left);
+                area.gh = Math.max(0, bottom - topEdge);
             }
 
             function watch() {
-                for (const w of region.watched) {
-                    w.xChanged.disconnect(region.update);
-                    w.yChanged.disconnect(region.update);
-                    w.parentChanged.disconnect(region.watch);
+                for (const w of area.watched) {
+                    w.xChanged.disconnect(area.update);
+                    w.yChanged.disconnect(area.update);
+                    w.parentChanged.disconnect(area.watch);
                 }
                 const list = [];
-                for (let it = region.modelData; it; it = it.parent) {
-                    it.xChanged.connect(region.update);
-                    it.yChanged.connect(region.update);
-                    it.parentChanged.connect(region.watch);
+                for (let it = area.modelData; it; it = it.parent) {
+                    it.xChanged.connect(area.update);
+                    it.yChanged.connect(area.update);
+                    it.parentChanged.connect(area.watch);
                     list.push(it);
                 }
-                region.watched = list;
-                region.update();
+                area.watched = list;
+                area.update();
             }
 
             property Connections sizeWatcher: Connections {
-                target: region.modelData
+                target: area.modelData
                 function onWidthChanged() {
-                    region.update();
+                    area.update();
                 }
                 function onHeightChanged() {
-                    region.update();
+                    area.update();
                 }
                 function onVisibleChanged() {
-                    region.update();
+                    area.update();
                 }
             }
 
             Component.onCompleted: watch()
             Component.onDestruction: {
-                for (const w of region.watched) {
-                    w.xChanged.disconnect(region.update);
-                    w.yChanged.disconnect(region.update);
-                    w.parentChanged.disconnect(region.watch);
+                for (const w of area.watched) {
+                    w.xChanged.disconnect(area.update);
+                    w.yChanged.disconnect(area.update);
+                    w.parentChanged.disconnect(area.watch);
                 }
             }
         }
