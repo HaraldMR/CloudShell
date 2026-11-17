@@ -103,6 +103,11 @@ Singleton {
                     property string reading: "Google Sans Flex"
                     property string expressive: "Google Sans Flex"
                 }
+                // Liquid glass: translucent, blurred surfaces with a bright edge
+                property JsonObject glass: JsonObject {
+                    property bool enable: false
+                    property real opacity: 0.45 // how solid the tint is: 0 = clear glass, 1 = solid
+                }
                 property JsonObject transparency: JsonObject {
                     property bool enable: false
                     property bool automatic: false
@@ -154,6 +159,17 @@ Singleton {
                 property bool verbose: true
                 property bool vertical: false // Not supported, kept for ported code
                 property list<string> screenList: []
+                // Pill backgrounds behind the bar's groups
+                property JsonObject pills: JsonObject {
+                    property bool enable: true
+                    property real opacity: 1 // 0..1
+                    property string style: "surface" // "surface" | "tonal" | "primary"
+                    property bool outline: false
+                    property bool clock: true
+                    property bool media: true
+                    property bool workspaces: true
+                    property bool status: true // tray, battery, network/bluetooth
+                }
                 property JsonObject workspaces: JsonObject {
                     property bool monochromeIcons: false
                     property int shown: 9

@@ -21,6 +21,8 @@ Item {
     implicitWidth: Appearance.sizes.osdWidth + 2 * Appearance.sizes.elevationMargin
     implicitHeight: valueIndicator.implicitHeight + 2 * Appearance.sizes.elevationMargin
 
+    readonly property Item backgroundItem: valueIndicator
+
     StyledRectangularShadow {
         target: valueIndicator
     }
@@ -35,6 +37,10 @@ Item {
 
         implicitWidth: valueRow.implicitWidth
         implicitHeight: valueRow.implicitHeight
+
+        GlassRim {
+            radius: valueIndicator.radius
+        }
 
         RowLayout { // Icon on the left, stuff on the right
             id: valueRow

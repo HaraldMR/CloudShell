@@ -33,8 +33,14 @@ Scope {
                 WlrLayershell.keyboardFocus: WlrKeyboardFocus.OnDemand
                 WlrLayershell.layer: WlrLayer.Overlay
                 exclusionMode: ExclusionMode.Ignore
+                BackgroundEffect.blurRegion: Appearance.glass ? fullRegion : null
+                Region {
+                    id: fullRegion
+                    item: contentLoader
+                }
 
                 Loader {
+                    id: contentLoader
                     anchors.fill: parent
                     sourceComponent: root.contentComponent
                 }

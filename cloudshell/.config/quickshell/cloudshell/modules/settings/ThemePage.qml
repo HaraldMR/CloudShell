@@ -89,6 +89,28 @@ ContentPage {
     }
 
     ContentSection {
+        icon: "blur_on"
+        title: qsTr("Liquid glass")
+
+        ConfigSwitch {
+            buttonIcon: "blur_on"
+            text: qsTr("See-through, blurred panels with a light edge")
+            checked: Config.options.appearance.glass.enable
+            onCheckedChanged: Config.options.appearance.glass.enable = checked
+        }
+        ConfigSlider {
+            visible: Config.options.appearance.glass.enable
+            buttonIcon: "opacity"
+            text: qsTr("Transparency")
+            // Left = more tinted, right = clearer
+            value: 1 - Config.options.appearance.glass.opacity
+            from: 0.05
+            to: 0.95
+            onValueChanged: Config.options.appearance.glass.opacity = Math.round((1 - value) * 100) / 100
+        }
+    }
+
+    ContentSection {
         icon: "palette"
         title: qsTr("Colours")
 

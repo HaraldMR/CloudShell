@@ -68,6 +68,8 @@ Item {
         return (Config.options.overview.orderBottomUp ? Config.options.overview.rows - ri - 1 : ri) * Config.options.overview.columns + (Config.options.overview.orderRightLeft ? Config.options.overview.columns - ci - 1 : ci) + 1
     }
 
+    readonly property Item backgroundItem: overviewBackground
+
     StyledRectangularShadow {
         target: overviewBackground
     }
@@ -81,6 +83,10 @@ Item {
         implicitHeight: workspaceColumnLayout.implicitHeight + padding * 2
         radius: root.largeWorkspaceRadius + padding
         color: Appearance.colors.colBackgroundSurfaceContainer
+
+        GlassRim {
+            radius: overviewBackground.radius
+        }
 
         Column { // Workspaces
             id: workspaceColumnLayout

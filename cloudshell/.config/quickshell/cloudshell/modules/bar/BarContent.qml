@@ -58,6 +58,11 @@ Item { // Bar content region
         }
         spacing: 4
 
+        BarPill {
+            id: clockPill
+            shown: Config.options.bar.pills.clock
+            Layout.alignment: Qt.AlignVCenter
+
         RippleButton {
             id: clockButton
             Layout.alignment: Qt.AlignVCenter
@@ -80,24 +85,32 @@ Item { // Bar content region
                 textColor: clockButton.toggled ? Appearance.colors.colOnSecondaryContainer : Appearance.colors.colOnLayer1
             }
         }
-
-        VerticalBarSeparator {
-            visible: Config.options.bar.borderless && root.showMedia
         }
 
-        Revealer {
-            id: mediaRevealer
-            reveal: root.showMedia
+        VerticalBarSeparator {
+            visible: Config.options.bar.borderless && root.showMedia && !clockPill.active && !mediaPill.active
+        }
+
+        BarPill {
+            id: mediaPill
+            shown: Config.options.bar.pills.media
+            visible: mediaRevealer.visible
             Layout.alignment: Qt.AlignVCenter
-            Media {
-                id: media
-                width: Math.min(implicitWidth, root.narrow ? 220 : Appearance.sizes.barCenterSideModuleWidth)
+
+            Revealer {
+                id: mediaRevealer
+                reveal: root.showMedia
+                Layout.alignment: Qt.AlignVCenter
+                Media {
+                    id: media
+                    width: Math.min(implicitWidth, root.narrow ? 220 : Appearance.sizes.barCenterSideModuleWidth)
+                }
             }
         }
     }
 
     // Tell the media popup where the media button is on this screen, so it opens right below it
-    readonly property real mediaAnchorX: leftSection.x + mediaRevealer.x
+    readonly property real mediaAnchorX: leftSection.x + mediaPill.x
     function publishMediaAnchor() {
         if (!root.screen)
             return;
@@ -119,13 +132,15 @@ Item { // Bar content region
         }
         spacing: 4
 
-        BarGroup {
-            id: middleCenterGroup
+        BarPill {
+            id: workspacesPill
+            shown: Config.options.bar.pills.workspaces
+            horizontalPadding: 6
             anchors.verticalCenter: parent.verticalCenter
 
             Workspaces {
                 id: workspacesWidget
-                Layout.fillHeight: true
+                Layout.preferredHeight: workspacesPill.pillHeight
                 MouseArea {
                     // Right-click to toggle overview
                     anchors.fill: parent
@@ -149,7 +164,27 @@ Item { // Bar content region
             rightMargin: Appearance.rounding.screenRounding
         }
         spacing: 5
-        layoutDirection: Qt.RightToLeft
+
+        BarPill {
+            id: statusPill
+            shown: Config.options.bar.pills.status
+            Layout.alignment: Qt.AlignVCenter
+            spacing: 5
+
+        SysTray {
+            visible: !root.narrow
+            Layout.fillWidth: false
+            Layout.fillHeight: true
+            invertSide: Config?.options.bar.bottom
+        }
+
+        // Battery sits outside the dropdown button, left of the network/bluetooth icons
+        BatteryIndicator {
+            Layout.alignment: Qt.AlignVCenter
+            Layout.leftMargin: 4
+            Layout.rightMargin: 4
+            visible: Battery.available
+        }
 
         RippleButton {
             id: dropdownButton
@@ -241,20 +276,9 @@ Item { // Bar content region
                 }
             }
         }
-
-        // Battery sits outside the dropdown button, left of the network/bluetooth icons
-        BatteryIndicator {
-            Layout.alignment: Qt.AlignVCenter
-            Layout.leftMargin: 4
-            Layout.rightMargin: 4
-            visible: Battery.available
-        }
-
-        SysTray {
-            visible: !root.narrow
-            Layout.fillWidth: false
-            Layout.fillHeight: true
-            invertSide: Config?.options.bar.bottom
         }
     }
+
+    // Pill backgrounds, so the bar window can blur behind them in glass mode
+    readonly property list<Item> pills: [clockPill, mediaPill, workspacesPill, statusPill]
 }

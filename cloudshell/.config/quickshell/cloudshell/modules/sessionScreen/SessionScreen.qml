@@ -45,7 +45,12 @@ Scope {
             WlrLayershell.namespace: "quickshell:session"
             WlrLayershell.layer: WlrLayer.Overlay
             WlrLayershell.keyboardFocus: WlrKeyboardFocus.Exclusive
-            color: ColorUtils.transparentize(Appearance.m3colors.m3background, Appearance.m3colors.darkmode ? 0.05 : 0.12)
+            color: ColorUtils.transparentize(Appearance.m3colors.m3background, Appearance.glass ? 1 - Appearance.glassOpacity : Appearance.m3colors.darkmode ? 0.05 : 0.12)
+            BackgroundEffect.blurRegion: Appearance.glass ? fullRegion : null
+            Region {
+                id: fullRegion
+                item: sessionMouseArea
+            }
 
             anchors {
                 top: true

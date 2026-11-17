@@ -97,6 +97,8 @@ Item { // Wrapper
         }
     }
 
+    readonly property Item backgroundItem: searchWidgetContent
+
     StyledRectangularShadow {
         target: searchWidgetContent
     }
@@ -112,6 +114,11 @@ Item { // Wrapper
         implicitHeight: columnLayout.implicitHeight
         radius: searchBar.height / 2 + searchBar.verticalPadding
         color: Appearance.colors.colBackgroundSurfaceContainer
+
+        GlassRim {
+            radius: searchWidgetContent.radius
+            z: 10
+        }
 
         Behavior on implicitHeight {
             id: searchHeightBehavior

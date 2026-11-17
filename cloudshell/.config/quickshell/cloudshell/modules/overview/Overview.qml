@@ -30,6 +30,11 @@ Scope {
         mask: Region {
             item: GlobalStates.overviewOpen ? columnLayout : null
         }
+        BackgroundEffect.blurRegion: Appearance.glass && GlobalStates.overviewOpen ? glassBlur.region : null
+        GlassBlur {
+            id: glassBlur
+            items: [searchWidget.backgroundItem, overviewLoader.item?.backgroundItem].filter(Boolean)
+        }
 
         anchors {
             top: true

@@ -44,6 +44,7 @@ windowRule({ class = ".*plasmawindowed.*" }, { float = true })
 windowRule({ class = "kcm_.*" }, { float = true })
 windowRule({ class = ".*bluedevilwizard" }, { float = true })
 windowRule({ title = "^(Cloudshell Settings)$" }, {
+	no_blur = false, -- the shell blurs it itself in liquid glass mode
 	float = true,
 	center = true,
 	size = { "(monitor_w*0.45)", "(monitor_h*0.65)" },
@@ -115,16 +116,19 @@ layerRule("gtk-layer-shell", { blur = true, ignore_alpha = 0 })
 layerRule("gtk4-layer-shell", { no_anim = true })
 
 -- Cloudshell
-layerRule("quickshell:.*", { blur = true, blur_popups = true, ignore_alpha = 0.79 })
+-- Blur for the liquid glass look is requested by the shell itself (ext-background-effect), so no
+-- blanket blur rules here; `ignore_alpha` would stop that blur on see-through surfaces.
+-- Glass blurs what's actually behind the shell (windows too), not just the wallpaper
+layerRule("quickshell:.*", { xray = false })
+layerRule("cloudshell:.*", { xray = false })
 layerRule("quickshell:bar", { animation = "slide" })
-layerRule("quickshell:popup", { xray = false, ignore_alpha = 1 }) -- bar tooltips: no tinted background
-layerRule("quickshell:mediaControls", { ignore_alpha = 1 })
+layerRule("quickshell:popup", { xray = false })
 layerRule("quickshell:notificationPopup", { animation = "fade" })
 layerRule("quickshell:reloadPopup", { animation = "slide" })
 layerRule("quickshell:overview", { no_anim = true })
 layerRule("quickshell:polkit", { no_anim = true })
 layerRule("quickshell:regionSelector", { no_anim = true })
-layerRule("quickshell:session", { blur = true, no_anim = true, ignore_alpha = 0 })
+layerRule("quickshell:session", { blur = true, xray = true, no_anim = true, ignore_alpha = 0 }) -- frosted power menu
 -- Wallpaper drawn by the shell when skwd-wall isn't running
 layerRule("cloudshell:background", { no_anim = true, xray = false })
 -- These animate themselves

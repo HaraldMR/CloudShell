@@ -11,4 +11,6 @@ RectangularShadow {
     spread: 1
     color: Appearance.colors.colShadow
     cached: true
+    // Glass surfaces are see-through, a shadow underneath would darken them
+    visible: !Appearance.glass
 }

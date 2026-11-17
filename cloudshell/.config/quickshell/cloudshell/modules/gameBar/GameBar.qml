@@ -93,6 +93,12 @@ Scope {
         }
         implicitWidth: panel.implicitWidth
         implicitHeight: panel.implicitHeight
+        BackgroundEffect.blurRegion: Appearance.glass ? glassRegion : null
+        Region {
+            id: glassRegion
+            item: panel
+            radius: panel.radius
+        }
 
         Rectangle {
             id: panel
@@ -100,8 +106,12 @@ Scope {
             implicitHeight: content.implicitHeight + 28
             radius: Appearance.rounding.verylarge
             color: ColorUtils.transparentize(Appearance.m3colors.m3surfaceContainer, 1 - Config.options.gameBar.backgroundOpacity)
-            border.width: 1
+            border.width: Appearance.glass ? 0 : 1
             border.color: ColorUtils.transparentize(Appearance.m3colors.m3outlineVariant, 0.5)
+
+            GlassRim {
+                radius: panel.radius
+            }
 
             opacity: GlobalStates.gameBarOpen ? 1 : 0
             scale: GlobalStates.gameBarOpen ? 1 : 0.95

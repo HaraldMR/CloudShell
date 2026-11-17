@@ -6,6 +6,8 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 import Quickshell
+import Quickshell.Wayland
+import qs.core.functions
 
 /**
  * Cloudshell settings. Runs inside the shell (not a separate process) so it can show live
@@ -39,7 +41,12 @@ Scope {
             minimumSize.height: 500
             implicitWidth: 1100
             implicitHeight: 760
-            color: Appearance.m3colors.m3background
+            color: Appearance.surface(Appearance.m3colors.m3background)
+            BackgroundEffect.blurRegion: Appearance.glass ? fullRegion : null
+            Region {
+                id: fullRegion
+                item: window.contentItem
+            }
             onVisibleChanged: if (!visible)
                 GlobalStates.settingsOpen = false
 
@@ -155,7 +162,7 @@ Scope {
                     Rectangle { // Content container
                         Layout.fillWidth: true
                         Layout.fillHeight: true
-                        color: Appearance.m3colors.m3surfaceContainerLow
+                        color: Appearance.glass ? ColorUtils.transparentize(Appearance.m3colors.m3surfaceContainerLow, 0.5) : Appearance.m3colors.m3surfaceContainerLow
                         radius: Appearance.rounding.windowRounding - window.contentPadding
 
                         Loader {

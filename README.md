@@ -51,6 +51,12 @@ hyprlock, GTK 3/4 (adw-gtk3) and Qt/KDE apps (`plasma-apply-colorscheme`). If sk
 isn't running, the shell starts it. Without skwd-wall, pick an image in Settings > Wallpaper & style: the shell
 draws it on every monitor itself and generates the colours from it.
 
+### Liquid glass
+
+Settings > Wallpaper & style > Liquid glass makes the shell's panels see-through with a blurred backdrop and a
+light edge. The blur is requested by the shell through the `ext-background-effect` Wayland protocol (Hyprland
+supports it), so no Hyprland blur rules are needed for it.
+
 ### Machine-specific settings
 
 `~/.config/cloudshell/config.json` is not in the repo. It holds per-machine things like the line-in device names, quick-toggle layout and notification rules.

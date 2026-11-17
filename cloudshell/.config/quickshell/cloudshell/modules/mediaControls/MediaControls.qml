@@ -109,6 +109,11 @@ Scope {
             mask: Region {
                 item: playerColumnLayout
             }
+            BackgroundEffect.blurRegion: Appearance.glass ? glassBlur.region : null
+            GlassBlur {
+                id: glassBlur
+                items: playerColumnLayout.children.filter(c => c.backgroundItem).map(c => c.backgroundItem)
+            }
 
             Component.onCompleted: {
                 GlobalFocusGrab.addDismissable(panelWindow);

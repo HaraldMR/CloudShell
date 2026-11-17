@@ -103,6 +103,11 @@ Scope {
             mask: Region {
                 item: osdValuesWrapper
             }
+            BackgroundEffect.blurRegion: Appearance.glass ? glassBlur.region : null
+            GlassBlur {
+                id: glassBlur
+                items: osdIndicatorLoader.item?.backgroundItem ? [osdIndicatorLoader.item.backgroundItem] : []
+            }
 
             exclusionMode: ExclusionMode.Ignore
             exclusiveZone: 0

@@ -15,8 +15,17 @@ Singleton {
     property QtObject sizes
     property string syntaxHighlightingTheme
 
-    property real backgroundTransparency: Config?.options.appearance.transparency.enable ? Config?.options.appearance.transparency.backgroundTransparency : 0
-    property real contentTransparency: Config?.options.appearance.transparency.enable ? Config?.options.appearance.transparency.contentTransparency : 0
+    // Liquid glass: surfaces become a translucent tint over a blurred backdrop, inner cards
+    // become see-through overlays, and GlassRim draws the bright edge.
+    readonly property bool glass: Config?.options.appearance.glass.enable ?? false
+    readonly property real glassOpacity: Math.max(0.05, Math.min(1, Config?.options.appearance.glass.opacity ?? 0.45))
+    property real backgroundTransparency: glass ? 1 - glassOpacity : Config?.options.appearance.transparency.enable ? Config?.options.appearance.transparency.backgroundTransparency : 0
+    property real contentTransparency: glass ? 0.55 : Config?.options.appearance.transparency.enable ? Config?.options.appearance.transparency.contentTransparency : 0
+
+    // A surface colour as it should be drawn: unchanged normally, a translucent tint with glass on
+    function surface(color) {
+        return glass ? ColorUtils.transparentize(color, 1 - glassOpacity) : color;
+    }
 
     m3colors: QtObject {
         property bool darkmode: true
@@ -100,7 +109,7 @@ Singleton {
         property color colOnLayer0: m3colors.m3onBackground
         property color colLayer0Hover: ColorUtils.transparentize(ColorUtils.mix(colLayer0, colOnLayer0, 0.9, root.contentTransparency))
         property color colLayer0Active: ColorUtils.transparentize(ColorUtils.mix(colLayer0, colOnLayer0, 0.8, root.contentTransparency))
-        property color colLayer0Border: ColorUtils.mix(root.m3colors.m3outlineVariant, colLayer0, 0.4)
+        property color colLayer0Border: root.glass ? "transparent" : ColorUtils.mix(root.m3colors.m3outlineVariant, colLayer0, 0.4)
         // Layer 1
         property color colLayer1Base: m3colors.m3surfaceContainerLow
         property color colLayer1: ColorUtils.solveOverlayColor(colLayer0Base, colLayer1Base, 1 - root.contentTransparency);

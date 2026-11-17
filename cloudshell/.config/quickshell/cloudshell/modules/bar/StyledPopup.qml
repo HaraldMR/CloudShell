@@ -54,6 +54,12 @@ LazyLoader {
             right: Appearance.sizes.verticalBarWidth
             bottom: Appearance.sizes.barHeight
         }
+        BackgroundEffect.blurRegion: Appearance.glass ? glassRegion : null
+        Region {
+            id: glassRegion
+            item: popupBackground
+            radius: popupBackground.radius
+        }
         WlrLayershell.namespace: "quickshell:popup"
         WlrLayershell.layer: WlrLayer.Overlay
 
@@ -73,9 +79,12 @@ LazyLoader {
             }
             implicitWidth: root.contentItem.implicitWidth + margin * 2
             implicitHeight: root.contentItem.implicitHeight + margin * 2
-            color: Appearance.m3colors.m3surfaceContainer
+            color: Appearance.surface(Appearance.m3colors.m3surfaceContainer)
             radius: Appearance.rounding.small
-            children: [root.contentItem]
+            children: [rim, root.contentItem]
+            property Item rim: GlassRim {
+                radius: popupBackground.radius
+            }
 
             border.width: 1
             border.color: Appearance.colors.colLayer0Border

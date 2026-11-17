@@ -63,6 +63,13 @@ PanelWindow {
     mask: Region {
         item: surface
     }
+    // Liquid glass: blur what's behind the surface
+    BackgroundEffect.blurRegion: Appearance.glass ? glassRegion : null
+    Region {
+        id: glassRegion
+        item: surface
+        radius: surface.radius
+    }
 
     function dismiss() {
         root.dismissed();
@@ -129,6 +136,10 @@ PanelWindow {
                 easing.type: Easing.BezierSpline
                 easing.bezierCurve: Appearance.animationCurves.expressiveDefaultSpatial
             }
+        }
+
+        GlassRim {
+            radius: surface.radius
         }
 
         Item {

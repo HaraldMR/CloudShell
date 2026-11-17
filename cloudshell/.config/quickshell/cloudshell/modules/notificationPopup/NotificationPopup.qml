@@ -29,6 +29,11 @@ Scope {
         mask: Region {
             item: listview.contentItem
         }
+        BackgroundEffect.blurRegion: Appearance.glass ? glassBlur.region : null
+        GlassBlur {
+            id: glassBlur
+            items: listview.contentItem.children.filter(c => c.backgroundItem).map(c => c.backgroundItem)
+        }
 
         color: "transparent"
         implicitWidth: Appearance.sizes.notificationPopupWidth

@@ -16,3 +16,6 @@ require("hyprland.keybinds")
 
 -- Loaded last so the monitor layout applied by hyprmoncfg always wins
 dofile_if_exists(HOME .. "/.config/hypr/hyprmoncfg-monitors.lua")
+
+-- Added by hyprmoncfg: its generated monitor rules load last, so nothing before this can override the applied layout.
+do local path = os.getenv("HOME") .. "/.config/hypr/hyprmoncfg-monitors.lua"; local file = io.open(path, "r"); if file then file:close(); dofile(path) end end

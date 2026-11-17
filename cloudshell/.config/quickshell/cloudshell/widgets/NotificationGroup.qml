@@ -121,9 +121,11 @@ MouseArea { // Notification group area
         }
     }
 
+    readonly property Item backgroundItem: background
+
     StyledRectangularShadow {
         target: background
-        visible: popup
+        visible: popup && !Appearance.glass
     }
     Rectangle { // Background of the notification
         id: background
@@ -150,6 +152,11 @@ MouseArea { // Notification group area
         Behavior on implicitHeight {
             id: implicitHeightAnim
             animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
+        }
+
+        GlassRim {
+            radius: background.radius
+            visible: Appearance.glass && root.popup
         }
 
         RowLayout { // Left column for icon, right column for content
