@@ -312,4 +312,10 @@ Item { // Player instance
             }
         }
     }
+
+    // Liquid glass edge, on top of the card (outside its mask layer so the rim stays crisp)
+    GlassRim {
+        anchors.fill: background
+        radius: background.radius
+    }
 }
