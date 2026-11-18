@@ -53,7 +53,7 @@ Scope {
             Rectangle {
                 id: windowBackground
                 anchors.fill: parent
-                color: Appearance.glass ? ColorUtils.transparentize(Appearance.m3colors.m3background, 1 - Math.max(Appearance.glassOpacity, 0.3)) : Appearance.m3colors.m3background
+                color: Appearance.glass ? "transparent" : Appearance.m3colors.m3background
             }
             onVisibleChanged: if (!visible)
                 GlobalStates.settingsOpen = false

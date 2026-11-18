@@ -15,16 +15,15 @@ Singleton {
     property QtObject sizes
     property string syntaxHighlightingTheme
 
-    // Liquid glass: surfaces become a translucent tint over a blurred backdrop, inner cards
-    // become see-through overlays, and GlassRim draws the bright edge.
+    // Liquid glass: panels are fully clear over a blurred backdrop (strength set by Glass service),
+    // inner cards become faint see-through overlays, and GlassRim draws the bright edge.
     readonly property bool glass: Config?.options.appearance.glass.enable ?? false
-    readonly property real glassOpacity: Math.max(0.05, Math.min(1, Config?.options.appearance.glass.opacity ?? 0.45))
-    property real backgroundTransparency: glass ? 1 - glassOpacity : Config?.options.appearance.transparency.enable ? Config?.options.appearance.transparency.backgroundTransparency : 0
+    property real backgroundTransparency: glass ? 1 : Config?.options.appearance.transparency.enable ? Config?.options.appearance.transparency.backgroundTransparency : 0
     property real contentTransparency: glass ? 0.55 : Config?.options.appearance.transparency.enable ? Config?.options.appearance.transparency.contentTransparency : 0
 
     // A surface colour as it should be drawn: unchanged normally, a translucent tint with glass on
     function surface(color) {
-        return glass ? ColorUtils.transparentize(color, 1 - glassOpacity) : color;
+        return glass ? ColorUtils.transparentize(color, 1) : color;
     }
 
     m3colors: QtObject {

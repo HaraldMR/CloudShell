@@ -106,7 +106,9 @@ Singleton {
                 // Liquid glass: translucent, blurred surfaces with a bright edge
                 property JsonObject glass: JsonObject {
                     property bool enable: false
-                    property real opacity: 0.45 // how solid the tint is: 0 = clear glass, 1 = solid
+                    // Blur strength behind glass panels: 1 = heavy frost, 0 = almost none.
+                    // Applied to Hyprland's blur settings by services/Glass.qml
+                    property real blur: 0.5
                 }
                 property JsonObject transparency: JsonObject {
                     property bool enable: false

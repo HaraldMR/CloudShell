@@ -37,7 +37,7 @@ ShellRoot {
         Cliphist.refresh();
         // Singletons are created on first use. These own keybinds/IPC, so create them up front
         // or their shortcuts don't exist until something else happens to touch them.
-        void [Wallpaper, Brightness, MprisController, Notifications, Deps];
+        void [Wallpaper, Brightness, MprisController, Notifications, Deps, Glass];
     }
 
     // Lock right after login (hyprlock), like ii's lock.launchOnStartup.

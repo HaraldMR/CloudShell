@@ -94,7 +94,7 @@ ContentPage {
 
         ConfigSwitch {
             buttonIcon: "blur_on"
-            text: qsTr("See-through, blurred panels with a light edge")
+            text: qsTr("Clear panels over a blurred backdrop, with a light edge")
             checked: Config.options.appearance.glass.enable
             onCheckedChanged: Config.options.appearance.glass.enable = checked
         }
@@ -102,11 +102,11 @@ ContentPage {
             visible: Config.options.appearance.glass.enable
             buttonIcon: "opacity"
             text: qsTr("Transparency")
-            // Left = more tinted, right = clearer
-            value: 1 - Config.options.appearance.glass.opacity
-            from: 0.05
-            to: 0.95
-            onValueChanged: Config.options.appearance.glass.opacity = Math.round((1 - value) * 100) / 100
+            // Left = heavy frost, right = almost no blur
+            value: 1 - Config.options.appearance.glass.blur
+            from: 0
+            to: 1
+            onValueChanged: Config.options.appearance.glass.blur = Math.round((1 - value) * 100) / 100
         }
     }
 

@@ -103,7 +103,7 @@ Item { // Player instance
         id: background
         anchors.fill: parent
         anchors.margins: Appearance.sizes.elevationMargin
-        color: ColorUtils.applyAlpha(blendedColors.colLayer0, Appearance.glass ? Appearance.glassOpacity : 1)
+        color: ColorUtils.applyAlpha(blendedColors.colLayer0, Appearance.glass ? 0 : 1)
         radius: root.radius
 
         layer.enabled: true
@@ -124,7 +124,7 @@ Item { // Player instance
             antialiasing: true
             asynchronous: true
             // With glass on, the blurred backdrop shows through the art
-            opacity: Appearance.glass ? Appearance.glassOpacity : 1
+            visible: !Appearance.glass
 
             layer.enabled: true
             layer.effect: StyledBlurEffect {

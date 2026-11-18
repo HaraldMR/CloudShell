@@ -23,6 +23,7 @@ end
 
 -- Monitors (hyprmoncfg). The two lines below are hyprmoncfg's own; keep them verbatim or it re-adds them.
 -- stylua: ignore start
+-- stylua: ignore end
+
 -- Added by hyprmoncfg: its generated monitor rules load last, so nothing before this can override the applied layout.
 do local path = os.getenv("HOME") .. "/.config/hypr/hyprmoncfg-monitors.lua"; local file = io.open(path, "r"); if file then file:close(); dofile(path) end end
--- stylua: ignore end

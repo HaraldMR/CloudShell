@@ -72,9 +72,10 @@ Item { // Bar content region
             colBackground: ColorUtils.transparentize(Appearance.colors.colLayer1Hover, 1)
             colBackgroundHover: Appearance.colors.colLayer1Hover
             colRipple: Appearance.colors.colLayer1Active
-            colBackgroundToggled: Appearance.colors.colSecondaryContainer
-            colBackgroundToggledHover: Appearance.colors.colSecondaryContainerHover
-            colRippleToggled: Appearance.colors.colSecondaryContainerActive
+            // Glass: no filled layer while open, just the click ripple
+            colBackgroundToggled: Appearance.glass ? ColorUtils.transparentize(Appearance.colors.colLayer1Hover, 1) : Appearance.colors.colSecondaryContainer
+            colBackgroundToggledHover: Appearance.glass ? Appearance.colors.colLayer1Hover : Appearance.colors.colSecondaryContainerHover
+            colRippleToggled: Appearance.glass ? Appearance.colors.colLayer1Active : Appearance.colors.colSecondaryContainerActive
             toggled: GlobalStates.calendarOpen
             onPressed: GlobalStates.calendarOpen = !GlobalStates.calendarOpen
 
@@ -82,7 +83,7 @@ Item { // Bar content region
                 id: clockWidget
                 anchors.centerIn: parent
                 showDate: Config.options.bar.verbose && !root.narrow
-                textColor: clockButton.toggled ? Appearance.colors.colOnSecondaryContainer : Appearance.colors.colOnLayer1
+                textColor: clockButton.toggled && !Appearance.glass ? Appearance.colors.colOnSecondaryContainer : Appearance.colors.colOnLayer1
             }
         }
         }
@@ -202,11 +203,12 @@ Item { // Bar content region
             colBackground: ColorUtils.transparentize(Appearance.colors.colLayer1Hover, 1)
             colBackgroundHover: Appearance.colors.colLayer1Hover
             colRipple: Appearance.colors.colLayer1Active
-            colBackgroundToggled: Appearance.colors.colSecondaryContainer
-            colBackgroundToggledHover: Appearance.colors.colSecondaryContainerHover
-            colRippleToggled: Appearance.colors.colSecondaryContainerActive
+            // Glass: no filled layer while open, just the click ripple
+            colBackgroundToggled: Appearance.glass ? ColorUtils.transparentize(Appearance.colors.colLayer1Hover, 1) : Appearance.colors.colSecondaryContainer
+            colBackgroundToggledHover: Appearance.glass ? Appearance.colors.colLayer1Hover : Appearance.colors.colSecondaryContainerHover
+            colRippleToggled: Appearance.glass ? Appearance.colors.colLayer1Active : Appearance.colors.colSecondaryContainerActive
             toggled: GlobalStates.dropdownOpen
-            property color colText: toggled ? Appearance.m3colors.m3onSecondaryContainer : Appearance.colors.colOnLayer0
+            property color colText: toggled && !Appearance.glass ? Appearance.m3colors.m3onSecondaryContainer : Appearance.colors.colOnLayer0
 
             Behavior on colText {
                 animation: Appearance.animation.elementMoveFast.colorAnimation.createObject(this)

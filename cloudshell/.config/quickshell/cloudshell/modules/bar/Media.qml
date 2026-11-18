@@ -13,7 +13,8 @@ Item {
     id: root
     readonly property MprisPlayer activePlayer: MprisController.activePlayer
     readonly property string cleanedTitle: StringUtils.cleanMusicTitle(activePlayer?.trackTitle) || qsTr("No media")
-    readonly property bool toggled: GlobalStates.mediaControlsOpen
+    // Glass: no filled layer while the popup is open
+    readonly property bool toggled: GlobalStates.mediaControlsOpen && !Appearance.glass
     readonly property color colText: toggled ? Appearance.colors.colOnSecondaryContainer : Appearance.colors.colOnLayer1
 
     implicitWidth: rowLayout.implicitWidth + 12 * 2

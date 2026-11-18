@@ -42,7 +42,7 @@ Item {
         width: parent.width
         height: root.pillHeight
         radius: height / 2
-        color: ColorUtils.transparentize(root.baseColor, 1 - Config.options.bar.pills.opacity * (Appearance.glass ? Appearance.glassOpacity : 1))
+        color: Appearance.glass ? "transparent" : ColorUtils.transparentize(root.baseColor, 1 - Config.options.bar.pills.opacity)
         border.width: Config.options.bar.pills.outline && !Appearance.glass ? 1 : 0
         border.color: Appearance.colors.colOutlineVariant
         Behavior on color {

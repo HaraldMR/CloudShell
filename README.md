@@ -54,8 +54,9 @@ draws it on every monitor itself and generates the colours from it.
 
 ### Liquid glass
 
-Settings > Wallpaper & style > Liquid glass makes the shell's panels see-through with a blurred backdrop and a
-light edge. The blur is requested by the shell through the `ext-background-effect` Wayland protocol (Hyprland
+Settings > Wallpaper & style > Liquid glass makes the shell's panels fully clear over a blurred backdrop with a
+light edge. The Transparency slider sets the blur strength (services/Glass.qml writes it to Hyprland's
+`decoration.blur` size/passes, re-applied after every Hyprland reload). The blur is requested by the shell through the `ext-background-effect` Wayland protocol (Hyprland
 supports it), so no Hyprland blur rules are needed for it.
 
 ### Machine-specific settings
