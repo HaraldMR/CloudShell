@@ -62,6 +62,10 @@ Singleton {
                 property bool inhibit: false
             }
 
+            property JsonObject glass: JsonObject {
+                property bool applied: false // glass blur values are live in Hyprland
+            }
+
             property JsonObject notifications: JsonObject {
                 property bool dnd: false
                 property real dndUntil: 0 // ms since epoch, 0 = until turned off

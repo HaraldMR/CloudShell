@@ -10,9 +10,12 @@ import QtQuick.Layouts
 import Quickshell
 import Quickshell.Wayland
 
-PopupWindow {
+// A layer window (not an xdg popup) so it can request blur for exactly its own shape in glass mode
+PanelWindow {
     id: root
     required property QsMenuHandle trayItemMenuHandle
+    // Tray icon the menu opens from
+    required property Item anchorItem
     property string trayItemId: ""
     property real popupBackgroundMargin: 0
 
@@ -21,6 +24,33 @@ PopupWindow {
 
     color: "transparent"
     property real padding: Appearance.sizes.elevationMargin
+
+    visible: false
+    screen: root.anchorItem?.QsWindow?.window?.screen ?? null
+    exclusionMode: ExclusionMode.Ignore
+    exclusiveZone: 0
+    WlrLayershell.namespace: "quickshell:trayMenu"
+    WlrLayershell.layer: WlrLayer.Overlay
+    anchors {
+        top: !Config.options.bar.bottom
+        bottom: Config.options.bar.bottom
+        left: true
+    }
+    // Centred under the tray icon, kept on screen
+    margins {
+        top: Appearance.sizes.barHeight - root.padding
+        bottom: Appearance.sizes.barHeight - root.padding
+        left: {
+            const item = root.anchorItem;
+            if (!item || !item.QsWindow?.window)
+                return 0;
+            const x = item.QsWindow.window.mapFromItem(item, item.width / 2, 0).x - root.implicitWidth / 2;
+            return Math.max(0, Math.min(x, (root.screen?.width ?? 1920) - root.implicitWidth));
+        }
+    }
+    mask: Region {
+        item: popupBackground
+    }
 
     // Liquid glass: blur behind the menu (strength follows the glass slider)
     BackgroundEffect.blurRegion: Appearance.glass ? glassBlur.region : null
@@ -81,8 +111,7 @@ PopupWindow {
                 margins: root.padding
             }
 
-            // Glass: a nearly invisible tint, so Hyprland's popup blur (which skips fully clear pixels) covers it
-            color: Appearance.glass ? ColorUtils.transparentize(Appearance.m3colors.m3background, 0.97) : Appearance.colors.colLayer0
+            color: Appearance.colors.colLayer0
             radius: Appearance.rounding.windowRounding
             border.width: Appearance.glass ? 0 : 1
             border.color: Appearance.colors.colLayer0Border

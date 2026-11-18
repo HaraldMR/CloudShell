@@ -15,7 +15,6 @@ Singleton {
     id: root
     readonly property bool enabled: Appearance.glass
     readonly property real strength: Math.max(0, Math.min(1, Config.options.appearance.glass.blur ?? 0.5))
-    property bool applied: false
 
     // Squared, so the clear end of the slider has fine steps: 0 -> size 1 / 1 pass (almost none),
     // 1 -> size 16 / 5 passes (heavy frost)
@@ -24,11 +23,11 @@ Singleton {
 
     function apply() {
         if (root.enabled) {
-            // popups: tray menus are popup windows, blurred through the bar's blur_popups layer rule
-            Quickshell.execDetached(["hyprctl", "eval", `hl.config({ decoration = { blur = { size = ${root.size}, passes = ${root.passes}, popups = true, popups_ignorealpha = 0.01 } } })`]);
-            root.applied = true;
-        } else if (root.applied) {
-            root.applied = false;
+            Quickshell.execDetached(["hyprctl", "eval", `hl.config({ decoration = { blur = { size = ${root.size}, passes = ${root.passes} } } })`]);
+            Persistent.states.glass.applied = true;
+        } else if (Persistent.states.glass.applied) {
+            // Our values may still be live in Hyprland (also after a shell restart): reload its own
+            Persistent.states.glass.applied = false;
             Quickshell.execDetached(["hyprctl", "reload"]);
         }
     }
@@ -39,8 +38,10 @@ Singleton {
         interval: 120
         onTriggered: root.apply()
     }
-    onStrengthChanged: applyTimer.restart()
-    onEnabledChanged: applyTimer.restart()
+    onStrengthChanged: if (ready)
+        applyTimer.restart()
+    onEnabledChanged: if (ready)
+        applyTimer.restart()
 
     Connections {
         target: Hyprland
@@ -50,13 +51,9 @@ Singleton {
         }
     }
 
-    Component.onCompleted: if (Config.ready)
+    readonly property bool ready: Config.ready && Persistent.ready
+    onReadyChanged: if (ready)
         applyTimer.restart()
-    Connections {
-        target: Config
-        function onReadyChanged() {
-            if (Config.ready)
-                applyTimer.restart();
-        }
-    }
+    Component.onCompleted: if (ready)
+        applyTimer.restart()
 }
