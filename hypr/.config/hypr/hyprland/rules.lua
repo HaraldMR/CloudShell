@@ -121,7 +121,7 @@ layerRule("gtk4-layer-shell", { no_anim = true })
 -- Glass blurs what's actually behind the shell (windows too), not just the wallpaper
 layerRule("quickshell:.*", { xray = false })
 layerRule("cloudshell:.*", { xray = false })
-layerRule("quickshell:bar", { animation = "slide" })
+layerRule("quickshell:bar", { animation = "slide", blur_popups = true }) -- tray menus (only blurred with glass on)
 layerRule("quickshell:popup", { xray = false })
 layerRule("quickshell:notificationPopup", { animation = "fade" })
 layerRule("quickshell:reloadPopup", { animation = "slide" })

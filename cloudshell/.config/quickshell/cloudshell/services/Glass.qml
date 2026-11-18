@@ -24,7 +24,8 @@ Singleton {
 
     function apply() {
         if (root.enabled) {
-            Quickshell.execDetached(["hyprctl", "eval", `hl.config({ decoration = { blur = { size = ${root.size}, passes = ${root.passes} } } })`]);
+            // popups: tray menus are popup windows, blurred through the bar's blur_popups layer rule
+            Quickshell.execDetached(["hyprctl", "eval", `hl.config({ decoration = { blur = { size = ${root.size}, passes = ${root.passes}, popups = true, popups_ignorealpha = 0.01 } } })`]);
             root.applied = true;
         } else if (root.applied) {
             root.applied = false;

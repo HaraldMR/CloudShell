@@ -16,7 +16,7 @@ privateBrowser = "zen-browser --private-window"
 musicPlayer = "youtube-music"
 
 -- Started once at login (after the shell)
-autostart = { "steam", "sleep 10 && vesktop" }
+autostart = {}
 
 -- Super+1..0 stay within groups of this many workspaces
 workspaceGroupSize = 10

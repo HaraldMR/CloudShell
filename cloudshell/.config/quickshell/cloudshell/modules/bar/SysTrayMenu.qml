@@ -3,10 +3,12 @@ pragma ComponentBehavior: Bound
 import qs.services
 import qs.core
 import qs.widgets
+import qs.core.functions
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 import Quickshell
+import Quickshell.Wayland
 
 PopupWindow {
     id: root
@@ -19,6 +21,13 @@ PopupWindow {
 
     color: "transparent"
     property real padding: Appearance.sizes.elevationMargin
+
+    // Liquid glass: blur behind the menu (strength follows the glass slider)
+    BackgroundEffect.blurRegion: Appearance.glass ? glassBlur.region : null
+    GlassBlur {
+        id: glassBlur
+        items: [popupBackground]
+    }
 
     implicitHeight: {
         let result = 0;
@@ -72,11 +81,17 @@ PopupWindow {
                 margins: root.padding
             }
 
-            color: Appearance.colors.colLayer0
+            // Glass: a nearly invisible tint, so Hyprland's popup blur (which skips fully clear pixels) covers it
+            color: Appearance.glass ? ColorUtils.transparentize(Appearance.m3colors.m3background, 0.97) : Appearance.colors.colLayer0
             radius: Appearance.rounding.windowRounding
-            border.width: 1
+            border.width: Appearance.glass ? 0 : 1
             border.color: Appearance.colors.colLayer0Border
             clip: true
+
+            GlassRim {
+                radius: popupBackground.radius
+                z: 10
+            }
 
             opacity: 0
             Component.onCompleted: opacity = 1
