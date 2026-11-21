@@ -20,7 +20,7 @@ The Quickshell config is modified and stripped down modules from https://github.
 
 ```sh
 git clone <this repo> ~/.config/dotfiles
-~/.config/dotfiles/install.sh           # packages, links, skwd-wall setup, imports ii settings if present
+~/.config/dotfiles/install.sh           # packages, links, skwd-wall setup
 ```
 
 `./install.sh --links` only (re)creates the symlinks.
