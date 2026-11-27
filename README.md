@@ -8,7 +8,7 @@ The Quickshell config is modified and stripped down modules from https://github.
 | Package | What it links |
 |---|---|
 | `cloudshell` | `~/.config/quickshell/cloudshell` – the shell |
-| `theming` | `~/.config/cloudshell/matugen` – matugen config + templates (shell, Hyprland, hyprlock, GTK, KDE/Qt, fuzzel) |
+| `theming` | `~/.config/cloudshell/matugen` – matugen config + templates (shell, Hyprland, hyprlock, GTK, KDE/Qt, fuzzel, Luciole) |
 | `fonts` | Google Sans Flex (OFL, bundled so no package is needed) |
 | `hypr` | `~/.config/hypr`: `hyprland.lua` loads one file per area from `hyprland/` (variables, env, execs, general, animations, rules, keybinds). Generated files stay local: `colors.lua` (matugen, default in `hypr-defaults/`) and `hyprmoncfg-monitors.lua` (monitors + workspace placement) |
 | | `~/.config/hypr/local.lua`: this device's overrides (app variables, autostart, input devices, extra binds). Not in the repo; `install.sh` creates it from `local.example.lua` |
@@ -48,7 +48,7 @@ is missing and which package provides it.
 
 skwd-wall applies the wallpaper and runs matugen with `~/.config/cloudshell/matugen/config.toml`.
 Matugen writes `~/.local/state/cloudshell/colors.json` (the shell reloads it live) and themes Hyprland borders,
-hyprlock, GTK 3/4 (adw-gtk3) and Qt/KDE apps (`plasma-apply-colorscheme`). If skwd-wall is installed but its daemon
+hyprlock, GTK 3/4 (adw-gtk3), Qt/KDE apps (`plasma-apply-colorscheme`) and Luciole (`~/.config/luciole/colors.toml`). If skwd-wall is installed but its daemon
 isn't running, the shell starts it. Without skwd-wall, pick an image in Settings > Wallpaper & style: the shell
 draws it on every monitor itself and generates the colours from it.
 

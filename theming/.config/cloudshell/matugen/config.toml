@@ -32,6 +32,10 @@ output_path = '~/.config/gtk-4.0/gtk.css'
 input_path = '~/.config/cloudshell/matugen/templates/fuzzel.ini'
 output_path = '~/.config/fuzzel/fuzzel_theme.ini'
 
+[templates.luciole]
+input_path = '~/.config/cloudshell/matugen/templates/luciole-colors.toml'
+output_path = '~/.config/luciole/colors.toml'
+
 [templates.kde]
 input_path = '~/.config/cloudshell/matugen/templates/kde.colors'
 output_path = '~/.local/state/cloudshell/kde.colors'
